@@ -1,0 +1,16 @@
+{
+  "name": "api-generated-db-types",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/api/generated-db-types/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/api/generated-db-types/**/*.ts"]
+      }
+    }
+  },
+  "tags": ["scope:api"]
+}
