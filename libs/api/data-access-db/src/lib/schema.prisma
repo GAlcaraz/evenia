@@ -1,0 +1,79 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("EVENIA_DB_URL")
+}
+
+generator nestgraphql {
+  provider                = "node node_modules/prisma-nestjs-graphql"
+  output                  = "../../../generated-db-types/src"
+  purgeOutput             = false
+  combineScalarFilters    = true
+  emitSingle              = true
+  noAtomicOperations      = true
+  useInputType_WhereInput_ALL = "WhereInput"
+  // field validator
+  fields_Validator_input  = true
+  fields_Validator_output = true
+  fields_Validator_model  = true
+  fields_Validator_from   = "class-validator"
+  // Args where|data nested validator
+  decorate_1_type         = "*Args"
+  decorate_1_field        = "@(data|where)"
+  decorate_1_name         = ValidateNested
+  decorate_1_from         = "class-validator"
+  decorate_1_arguments    = "[]"
+}
+
+model User {
+  id String @id @default(uuid())
+
+  /// @Validator.IsEmail()
+  email String @unique
+
+  /// @Validator.IsString()
+  /// @Validator.MaxLength(100)
+  /// @Validator.MinLength(2)
+  name String?
+
+  /// @Validator.IsString()
+  /// @Validator.MaxLength(100)
+  /// @Validator.MinLength(8)
+  /// @HideField()
+  password String
+}
+
+enum City {
+  Paris
+  NewYork
+  Istanbul
+  London
+  Madrid
+  Tokyo
+  Dubai
+  Blida
+  Wakanda
+  Gotham
+}
+
+model Event {
+  id String @id @default(uuid())
+
+  /// @Validator.IsString()
+  /// @Validator.MaxLength(100)
+  /// @Validator.MinLength(2)
+  name String
+
+  /// @Validator.IsDate()
+  date DateTime
+
+  /// @Validator.IsEnum(City)
+  city City
+
+  /// @Validator.IsString()
+  /// @Validator.MaxLength(1000)
+  description String?
+}
