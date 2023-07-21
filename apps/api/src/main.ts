@@ -8,16 +8,20 @@ import { NestFactory } from '@nestjs/core';
 
 import { AppModule } from './app/app.module';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
+// import helmet from '@fastify/helmet'
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter()
   );
+  // TODO: Add (fix issue with) helmet for added security
+  // await app.register(helmet)
   const port = process.env.PORT || 3000;
   await app.listen(port);
+  app.enableCors();
   Logger.log(
-    `🚀 Application is running on: http://localhost:${port}/graphiql`
+    `🚀 Playground is running on: http://localhost:${port}/graphiql`
   );
 }
 
