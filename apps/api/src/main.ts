@@ -13,13 +13,12 @@ import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
-    new FastifyAdapter()
+    new FastifyAdapter(), { cors: true }
   );
   // TODO: Add (fix issue with) helmet for added security
   // await app.register(helmet)
   const port = process.env.PORT || 3000;
   await app.listen(port);
-  app.enableCors();
   Logger.log(
     `🚀 Playground is running on: http://localhost:${port}/graphiql`
   );
