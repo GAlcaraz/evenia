@@ -14,11 +14,11 @@ const GET_EVENTS = gql`
 
 const UPDATE_EVENT = gql`
   mutation UpdateEvent(
-    $id: ID!
+    $id: String!
     $name: String
     $date: DateTime
     $description: String
-    $city: String
+    $city: City
   ) {
     updateEvent(
       where: { id: $id }

@@ -9,11 +9,11 @@ export type GetEventsVariables = Types.Exact<{ [key: string]: never; }>;
 export type GetEvents = { __typename?: 'Query', events: Array<{ __typename?: 'Event', id: string, name: string, date: any, description?: string | null, city: Types.City }> };
 
 export type UpdateEventVariables = Types.Exact<{
-  id: Types.Scalars['ID']['input'];
+  id: Types.Scalars['String']['input'];
   name?: Types.InputMaybe<Types.Scalars['String']['input']>;
   date?: Types.InputMaybe<Types.Scalars['DateTime']['input']>;
   description?: Types.InputMaybe<Types.Scalars['String']['input']>;
-  city?: Types.InputMaybe<Types.Scalars['String']['input']>;
+  city?: Types.InputMaybe<Types.City>;
 }>;
 
 
@@ -50,7 +50,7 @@ export const GetEventsDocument = /*#__PURE__*/ gql`
 }
     `;
 export const UpdateEventDocument = /*#__PURE__*/ gql`
-    mutation UpdateEvent($id: ID!, $name: String, $date: DateTime, $description: String, $city: String) {
+    mutation UpdateEvent($id: String!, $name: String, $date: DateTime, $description: String, $city: City) {
   updateEvent(
     where: {id: $id}
     data: {name: $name, date: $date, description: $description, city: $city}
