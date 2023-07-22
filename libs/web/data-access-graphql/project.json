@@ -1,0 +1,16 @@
+{
+  "name": "web-data-access-graphql",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/web/data-access-graphql/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/web/data-access-graphql/**/*.ts"]
+      }
+    }
+  },
+  "tags": ["scope:web"]
+}
