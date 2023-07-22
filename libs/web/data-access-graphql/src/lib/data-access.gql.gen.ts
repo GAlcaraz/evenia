@@ -1,7 +1,7 @@
 import * as Types from './types';
 
 import { GraphQLClient } from 'graphql-request';
-import { GraphQLClientRequestHeaders } from 'graphql-request/build/cjs/types';
+import * as Dom from 'graphql-request/dist/types.dom';
 import { gql } from 'graphql-request';
 export type GetEventsVariables = Types.Exact<{ [key: string]: never; }>;
 
@@ -29,13 +29,13 @@ export type CreateEventVariables = Types.Exact<{
 
 export type CreateEvent = { __typename?: 'Mutation', createEvent: { __typename?: 'Event', name: string, id: string, date: any, description?: string | null, city: Types.City } };
 
-export type LoginVariables = Types.Exact<{
+export type ValidateUserVariables = Types.Exact<{
   email: Types.Scalars['String']['input'];
   password: Types.Scalars['String']['input'];
 }>;
 
 
-export type Login = { __typename?: 'Query', login: { __typename?: 'AccessToken', accessToken?: string | null } };
+export type ValidateUser = { __typename?: 'Query', validateUser: boolean };
 
 
 export const GetEventsDocument = /*#__PURE__*/ gql`
@@ -76,11 +76,9 @@ export const CreateEventDocument = /*#__PURE__*/ gql`
   }
 }
     `;
-export const LoginDocument = /*#__PURE__*/ gql`
-    query Login($email: String!, $password: String!) {
-  login(email: $email, password: $password) {
-    accessToken
-  }
+export const ValidateUserDocument = /*#__PURE__*/ gql`
+    query ValidateUser($email: String!, $password: String!) {
+  validateUser(email: $email, password: $password)
 }
     `;
 
@@ -91,17 +89,17 @@ const defaultWrapper: SdkFunctionWrapper = (action, _operationName, _operationTy
 
 export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = defaultWrapper) {
   return {
-    GetEvents(variables?: GetEventsVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetEvents> {
+    GetEvents(variables?: GetEventsVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetEvents> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetEvents>(GetEventsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetEvents', 'query');
     },
-    UpdateEvent(variables: UpdateEventVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<UpdateEvent> {
+    UpdateEvent(variables: UpdateEventVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<UpdateEvent> {
       return withWrapper((wrappedRequestHeaders) => client.request<UpdateEvent>(UpdateEventDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'UpdateEvent', 'mutation');
     },
-    CreateEvent(variables?: CreateEventVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<CreateEvent> {
+    CreateEvent(variables?: CreateEventVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<CreateEvent> {
       return withWrapper((wrappedRequestHeaders) => client.request<CreateEvent>(CreateEventDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'CreateEvent', 'mutation');
     },
-    Login(variables: LoginVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<Login> {
-      return withWrapper((wrappedRequestHeaders) => client.request<Login>(LoginDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'Login', 'query');
+    ValidateUser(variables: ValidateUserVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<ValidateUser> {
+      return withWrapper((wrappedRequestHeaders) => client.request<ValidateUser>(ValidateUserDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'ValidateUser', 'query');
     }
   };
 }

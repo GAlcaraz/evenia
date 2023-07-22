@@ -52,10 +52,8 @@ const CREATE_EVENT = gql`
   }
 `;
 
-const LOGIN = gql`
-  query Login($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
-      accessToken
-    }
+const VALIDATE_USER = gql`
+  query ValidateUser($email: String!, $password: String!) {
+    validateUser(email: $email, password: $password)
   }
 `;

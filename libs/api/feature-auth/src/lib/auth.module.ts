@@ -12,16 +12,15 @@ import { jwtConstants } from './constants';
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
       secret: jwtConstants.secret,
-      signOptions: {
-        expiresIn: '1h',
-        algorithm: 'HS512',
-      },
+      // signOptions: {
+      //   expiresIn: '1h',
+      //   // algorithm: 'HS512',
+      // },
     }),
     UserModule,
   ],
 
   providers: [AuthService, AuthResolver, JwtStrategy],
   exports: [JwtStrategy, PassportModule],
-  //   controllers: [AuthController],
 })
 export class AuthModule {}

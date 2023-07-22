@@ -1,6 +1,8 @@
 import { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { gql } from '../../../data-access/graphql-client';
+import { JWT } from 'next-auth/jwt';
+import jwt from 'jsonwebtoken';
 
 export const authOptions: NextAuthOptions = {
   session: {
@@ -21,44 +23,40 @@ export const authOptions: NextAuthOptions = {
         if (!credentials?.email || !credentials.password) {
           return null;
         }
-        const user = {
-          id: '1',
-          name: 'Admin',
-          email: 'admin@admin.com',
-          password: 'taqwwe',
-        };
+        const isValid = (
+          await gql.ValidateUser({
+            email: credentials?.email,
+            password: credentials?.password,
+          })
+        ).validateUser;
 
-        // if (!user || !(await compare(credentials.password, user.password))) {
-        if (!user) {
+        if (!isValid) {
           return null;
         }
 
-        return user;
+        return { email: credentials.email };
       },
     }),
   ],
-  callbacks: {
-    async signIn({ user, account, profile, email, credentials }) {
-      const { accessToken } = (
-        await gql.Login({
-          email: credentials?.email,
-          password: credentials?.password,
-        })
-      ).login;
-      if (accessToken) {
-        return true;
-      } else {
-        // Return false to display a default error message
-        return false;
-        // Or you can return a URL to redirect to:
-        // return '/unauthorized'
-      }
+  jwt: {
+    secret: process.env.NEXTAUTH_SECRET,
+    encode: async (data: any) => {
+      const { secret, token } = data;
+      const jwtClaims = {
+        email: token.email,
+      };
+
+      const encodedToken = jwt.sign(jwtClaims, secret, {
+        expiresIn: '1h',
+        algorithm: 'HS512',
+      });
+      return encodedToken;
     },
-    // async jwt({ token, account }) {
-    //   if (account) {
-    //     token['accessToken'] = account.access_token;
-    //   }
-    //   return token;
-    // },
+    async decode(data: any) {
+      const { secret, token } = data;
+      const verify = jwt.verify(token, secret) as JWT;
+
+      return verify;
+    },
   },
 };
