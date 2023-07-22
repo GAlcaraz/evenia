@@ -36,6 +36,7 @@ export class EventResolver {
   }
 
   @Mutation(() => Event)
+  @UseGuards(OwnerGuard)
   removeEvent(@Args() deleteOneEventArgs: DeleteOneEventArgs) {
     return this.eventService.remove(deleteOneEventArgs);
   }
