@@ -29,11 +29,6 @@ export enum SortOrder {
     desc = "desc"
 }
 
-export enum QueryMode {
-    'default' = "default",
-    insensitive = "insensitive"
-}
-
 export enum NullsOrder {
     first = "first",
     last = "last"
@@ -63,7 +58,6 @@ export enum EventScalarFieldEnum {
 registerEnumType(EventScalarFieldEnum, { name: 'EventScalarFieldEnum', description: undefined })
 registerEnumType(City, { name: 'City', description: undefined })
 registerEnumType(NullsOrder, { name: 'NullsOrder', description: undefined })
-registerEnumType(QueryMode, { name: 'QueryMode', description: undefined })
 registerEnumType(SortOrder, { name: 'SortOrder', description: undefined })
 registerEnumType(TransactionIsolationLevel, { name: 'TransactionIsolationLevel', description: undefined })
 registerEnumType(UserScalarFieldEnum, { name: 'UserScalarFieldEnum', description: undefined })
@@ -810,8 +804,6 @@ export class StringFilter {
     startsWith?: string;
     @Field(() => String, {nullable:true})
     endsWith?: string;
-    @Field(() => QueryMode, {nullable:true})
-    mode?: keyof typeof QueryMode;
     @Field(() => StringFilter, {nullable:true})
     not?: InstanceType<typeof StringFilter>;
 }
@@ -838,8 +830,6 @@ export class StringWithAggregatesFilter {
     startsWith?: string;
     @Field(() => String, {nullable:true})
     endsWith?: string;
-    @Field(() => QueryMode, {nullable:true})
-    mode?: keyof typeof QueryMode;
     @Field(() => StringWithAggregatesFilter, {nullable:true})
     not?: InstanceType<typeof StringWithAggregatesFilter>;
     @Field(() => IntFilter, {nullable:true})

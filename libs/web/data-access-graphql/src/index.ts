@@ -1,1 +1,1 @@
-export * from './lib/web-data-access-graphql';
+export * from './lib/get-graphql-client';

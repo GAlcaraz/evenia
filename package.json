@@ -9,7 +9,8 @@
     "test": "nx test",
     "dockers:dev": "docker-compose -f tools/evenia-environment/dev.docker-compose.yaml up -d --no-recreate --remove-orphans",
     "db:migrate:dev": "npx env-cmd -f .local.env npx prisma migrate dev",
-    "db:studio": "npx env-cmd -f .local.env npx prisma studio"
+    "db:studio": "npx env-cmd -f .local.env npx prisma studio",
+    "gen:gql-web": "graphql-codegen --config tools/graphql-codegen/codegen.yml"
   },
   "private": true,
   "dependencies": {
@@ -31,6 +32,8 @@
     "class-validator": "^0.14.0",
     "fastify": "^4.13.0",
     "graphql": "^16.7.1",
+    "graphql-codegen": "^0.4.0",
+    "graphql-request": "^5.1.0",
     "jsonwebtoken": "^9.0.1",
     "mercurius": "^13.1.0",
     "next": "13.4.1",
@@ -45,6 +48,12 @@
     "tslib": "^2.3.0"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^4.0.1",
+    "@graphql-codegen/near-operation-file-preset": "^2.5.0",
+    "@graphql-codegen/typed-document-node": "^5.0.1",
+    "@graphql-codegen/typescript": "^4.0.1",
+    "@graphql-codegen/typescript-graphql-request": "^5.0.0",
+    "@graphql-codegen/typescript-operations": "^4.0.1",
     "@nestjs/schematics": "^10.0.1",
     "@nestjs/testing": "^10.0.2",
     "@nrwl/next": "^16.5.3",
@@ -59,6 +68,7 @@
     "@nx/react": "16.5.3",
     "@nx/webpack": "16.5.3",
     "@nx/workspace": "16.5.3",
+    "@parcel/watcher": "^2.2.0",
     "@testing-library/react": "14.0.0",
     "@types/bcrypt": "^5.0.0",
     "@types/jest": "^29.4.0",
