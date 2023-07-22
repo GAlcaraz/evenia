@@ -1,5 +1,7 @@
 import { EventModule } from '@evenia/api/feature-event';
 import { UserModule } from '@evenia/api/feature-user';
+import { AuthModule } from '@evenia/api/feature-auth';
+
 import { Module } from '@nestjs/common';
 
 import { GraphQLModule } from '@nestjs/graphql';
@@ -15,6 +17,7 @@ import * as path from 'path';
     }),
     UserModule,
     EventModule,
+    AuthModule,
   ],
   providers: [],
 })

@@ -4,12 +4,14 @@ import { AuthService } from './auth.service';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
+import { AuthResolver } from './auth.resolver';
+import { jwtConstants } from './constants';
 
 @Module({
   imports: [
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
-      secret: process.env['AUTH_SECRET'],
+      secret: jwtConstants.secret,
       signOptions: {
         expiresIn: '1h',
         algorithm: 'HS512',
@@ -18,7 +20,7 @@ import { JwtStrategy } from './jwt.strategy';
     UserModule,
   ],
 
-  providers: [AuthService, JwtStrategy],
+  providers: [AuthService, AuthResolver, JwtStrategy],
   exports: [JwtStrategy, PassportModule],
   //   controllers: [AuthController],
 })

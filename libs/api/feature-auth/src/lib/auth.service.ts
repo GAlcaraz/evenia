@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import * as bcrypt from 'bcrypt';
 import { UserService } from '@evenia/api/feature-user';
 import { AuthCredentialsDto } from './dto/auth-creds.dto';
 import { JwtPayload } from 'jsonwebtoken';
+import { AccessToken } from './dto/access-token.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -12,19 +13,16 @@ export class AuthService {
     private jwtService: JwtService
   ) {}
 
-  async login(
-    authCredentialsDto: AuthCredentialsDto
-  ): Promise<{ accessToken: string }> {
+  async login(authCredentialsDto: AuthCredentialsDto): Promise<AccessToken> {
     const { email, password } = authCredentialsDto;
+    const user = await this.usersService.findOne({ where: { email } });
+    if (!user || !(await bcrypt.compare(password, user.password))) {
+      throw new UnauthorizedException();
+    }
 
-    const user = this.usersService.findOne({ where: { email } });
-    const payload: JwtPayload = { email };
+    const payload: JwtPayload = { sub: user.id, email: user.email };
 
-    const accessToken: string = this.jwtService.sign(payload);
-    // const accessToken: string = await this.jwtService.sign(payload, {
-    //   privateKey: rsa,
-    //   algorithm: 'RS256',
-    // });
+    const accessToken: string = await this.jwtService.signAsync(payload);
     return { accessToken };
   }
 }
