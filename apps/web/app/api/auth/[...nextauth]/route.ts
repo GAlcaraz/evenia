@@ -1,5 +1,5 @@
 import NextAuth from 'next-auth';
-import { authOptions } from '@evenia/web/feature-auth';
+import { authOptions } from '../auth-options';
 
 const handler = NextAuth(authOptions);
 
