@@ -1,4 +1,6 @@
-import { NextAuthProvider } from './_components/Providers';
+import { Footer } from './_components/Footer';
+import Header from './_components/Header';
+import { AppProvider } from './_components/Providers';
 import './global.css';
 
 export const metadata = {
@@ -12,10 +14,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body>
-        <NextAuthProvider>{children}</NextAuthProvider>
-      </body>
-    </html>
+    <AppProvider>
+      <Header />
+      <body>{children}</body>
+      <Footer />
+    </AppProvider>
   );
 }
