@@ -9,11 +9,9 @@ type Props = {
 };
 
 export const AppProvider = ({ children }: Props) => {
-  console.log(eveniaTheme.colors);
-
   return (
     <CacheProvider>
-      <ChakraProvider resetCSS theme={eveniaTheme}>
+      <ChakraProvider theme={eveniaTheme}>
         <SessionProvider>{children}</SessionProvider>
       </ChakraProvider>
     </CacheProvider>

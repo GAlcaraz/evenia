@@ -4,7 +4,8 @@ import EveniaLogo from '../../public/Logo.png';
 import Image from 'next/image';
 import React from 'react';
 
-import { Box, Flex, HStack, Text } from '@chakra-ui/react';
+import { Flex, HStack } from '@chakra-ui/react';
+import { LoginButton } from './UserButtons';
 
 export const Footer = () => {
   return (
@@ -31,17 +32,12 @@ export const Footer = () => {
             },
           }}
         >
-          <a
-            href="https://github.com/GAlcaraz"
-            target="_blank"
-            rel="noreferrer"
-          >
-            <HStack direction="row" align="center">
-              <Flex p={24}>
-                <Image height={38} src={EveniaLogo} alt="this is my image" />
-              </Flex>
-            </HStack>
-          </a>
+          <HStack direction="row" align="center">
+            <Flex p={24}>
+              <Image height={38} src={EveniaLogo} alt="this is my image" />
+            </Flex>
+            <LoginButton />
+          </HStack>
         </Flex>
       </Flex>
     </Flex>
