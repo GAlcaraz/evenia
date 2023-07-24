@@ -13,10 +13,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <AppProvider>
-      <Header />
-      <body>{children}</body>
-      <Footer />
-    </AppProvider>
+    <html lang="en">
+      <body>
+        <AppProvider>
+          <Header />
+          {children}
+          <Footer />
+        </AppProvider>
+      </body>
+    </html>
   );
 }
