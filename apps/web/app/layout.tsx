@@ -1,7 +1,6 @@
 import { Footer } from './_components/Footer';
 import Header from './_components/Header';
 import { AppProvider } from './_components/Providers';
-import './global.css';
 
 export const metadata = {
   title: 'Welcome to web',
