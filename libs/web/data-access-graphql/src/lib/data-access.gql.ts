@@ -41,6 +41,7 @@ const GET_EVENT = gql`
       date
       description
       city
+      isOwner
     }
   }
 `;

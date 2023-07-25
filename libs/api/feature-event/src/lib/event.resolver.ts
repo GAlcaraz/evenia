@@ -15,7 +15,7 @@ import {
   UpdateOneEventArgs,
   Event,
 } from '@evenia/api/generated-db-types';
-import { JwtGuard } from '@evenia/api/feature-auth';
+import { JwtGuard, UserGuard } from '@evenia/api/feature-auth';
 import { UseGuards } from '@nestjs/common';
 
 @Resolver(() => Event)
@@ -65,7 +65,7 @@ export class EventResolver {
   }
 
   @ResolveField('isOwner', (returns) => Boolean)
-  @UseGuards(JwtGuard)
+  @UseGuards(UserGuard)
   async isOwner(@Parent() event: Event, @Context() context: any) {
     const userEmail = context.req.user.email;
     return this.eventService.isOwner(event.id, userEmail);

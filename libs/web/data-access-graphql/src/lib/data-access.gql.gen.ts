@@ -24,7 +24,7 @@ export type GetEventVariables = Types.Exact<{
 }>;
 
 
-export type GetEvent = { __typename?: 'Query', event: { __typename?: 'Event', name: string, id: string, date: any, description?: string | null, city: Types.City } };
+export type GetEvent = { __typename?: 'Query', event: { __typename?: 'Event', name: string, id: string, date: any, description?: string | null, city: Types.City, isOwner: boolean } };
 
 export type CreateEventVariables = Types.Exact<{
   ownerEmail?: Types.InputMaybe<Types.Scalars['String']['input']>;
@@ -79,6 +79,7 @@ export const GetEventDocument = /*#__PURE__*/ gql`
     date
     description
     city
+    isOwner
   }
 }
     `;
