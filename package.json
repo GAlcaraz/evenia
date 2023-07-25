@@ -38,6 +38,7 @@
     "class-validator": "^0.14.0",
     "date-fns": "^2.30.0",
     "fastify": "^4.13.0",
+    "formik": "^2.4.2",
     "framer-motion": "^10.13.0",
     "graphql": "^16.7.1",
     "graphql-codegen": "^0.4.0",
