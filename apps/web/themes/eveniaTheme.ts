@@ -54,6 +54,15 @@ const eveniaTheme = extendTheme({
           borderRadius: 100,
         },
       },
+      variants: {
+        outline: {
+          borderColor: 'primary.majorelle',
+          textColor: 'primary.majorelle',
+          borderStyle: 'solid',
+          borderWidth: '2px',
+          background: 'text.white',
+        },
+      },
       defaultProps: {
         size: 'lg',
       },

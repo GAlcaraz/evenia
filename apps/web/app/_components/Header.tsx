@@ -8,6 +8,7 @@ import {
   InputGroup,
   InputLeftElement,
   Button,
+  Stack,
 } from '@chakra-ui/react';
 import { SearchIcon } from '@chakra-ui/icons';
 import NextLink from 'next/link';
@@ -53,12 +54,14 @@ const Header = () => {
           </InputGroup>
         </Flex>
         {status === 'authenticated' ? (
-          <Flex>
+          <Stack direction="row" spacing={4}>
             <NextLink href="/events/create" passHref>
-              <Button as="a">Create Event</Button>
+              <Button as="div" variant="outline">
+                Create Event
+              </Button>
             </NextLink>
             <LogoutButton />
-          </Flex>
+          </Stack>
         ) : (
           <LoginButton />
         )}
