@@ -67,7 +67,7 @@ export class EventResolver {
   @ResolveField('isOwner', (returns) => Boolean, { nullable: true })
   @UseGuards(UserGuard)
   async isOwner(@Parent() event: Event, @Context() context: any) {
-    const userEmail = context.req.user;
+    const userEmail = context.req.user.email;
     if (!userEmail) {
       return null;
     }
