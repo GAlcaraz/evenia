@@ -21,7 +21,6 @@ export class UserGuard implements CanActivate {
     } catch (e) {
       return true;
     }
-
     return true;
   }
 }
