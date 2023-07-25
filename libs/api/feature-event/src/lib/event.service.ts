@@ -5,6 +5,7 @@ import {
   DeleteOneEventArgs,
   FindUniqueEventArgs,
   UpdateOneEventArgs,
+  Event,
 } from '@evenia/api/generated-db-types';
 
 @Injectable()
@@ -27,7 +28,11 @@ export class EventService {
   }
 
   async findOne(findUniqueEventArgs: FindUniqueEventArgs) {
-    return this.prisma.event.findUnique(findUniqueEventArgs);
+    findUniqueEventArgs.where;
+    return this.prisma.event.findUnique({
+      where: findUniqueEventArgs.where,
+      include: { owner: true },
+    });
   }
 
   async update(updateOneEventArgs: UpdateOneEventArgs, userEmail: string) {
@@ -41,6 +46,15 @@ export class EventService {
     return this.prisma.event.delete(deleteOneEventArgs);
   }
 
+  async isOwner(eventId: string, userEmail: string) {
+    try {
+      await this.validateOwnership(eventId, userEmail);
+    } catch (e: any) {
+      return false;
+    }
+    return true;
+  }
+
   private async validateOwnership(
     eventId: string | undefined,
     ownerEmail: string
@@ -52,7 +66,6 @@ export class EventService {
     const event = await this.prisma.event.findUnique({
       where: { id: eventId },
     });
-
     if (user?.id != event?.ownerId) {
       throw UnauthorizedException;
     }

@@ -13,9 +13,11 @@ import { useEffect, useState } from 'react';
 import { gql } from '../../data-access/graphql-client';
 import { format } from 'date-fns';
 import { CalendarIcon } from '@chakra-ui/icons';
+import { useSession } from 'next-auth/react';
 
 const EventDisplay: React.FC<{ eventId: string }> = ({ eventId }) => {
   const [event, setEvent] = useState<unknown>();
+  const { data: session } = useSession();
 
   useEffect(() => {
     async function fetchEvent() {
@@ -35,7 +37,7 @@ const EventDisplay: React.FC<{ eventId: string }> = ({ eventId }) => {
           src={`https://source.unsplash.com/random/500x500?sig=${Math.floor(
             Math.random() * 10
           )}`}
-          alt="Green double couch with wooden legs"
+          alt="Random event"
           objectFit="cover"
           w={['100%', '50%']}
         />

@@ -1,4 +1,12 @@
-import { Resolver, Query, Mutation, Args, Context } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  Context,
+  ResolveField,
+  Parent,
+} from '@nestjs/graphql';
 import { EventService } from './event.service';
 import {
   CreateOneEventArgs,
@@ -54,5 +62,12 @@ export class EventResolver {
     const userEmail = context.req.user.email;
 
     return this.eventService.remove(deleteOneEventArgs, userEmail);
+  }
+
+  @ResolveField('isOwner', (returns) => Boolean)
+  @UseGuards(JwtGuard)
+  async isOwner(@Parent() event: Event, @Context() context: any) {
+    const userEmail = context.req.user.email;
+    return this.eventService.isOwner(event.id, userEmail);
   }
 }
