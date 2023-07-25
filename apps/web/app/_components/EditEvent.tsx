@@ -11,6 +11,7 @@ import {
   Textarea,
   Stack,
   InputGroup,
+  Select,
 } from '@chakra-ui/react';
 import { useFormik } from 'formik';
 import { useEffect, useState } from 'react';
@@ -27,11 +28,21 @@ const EditEvent: React.FC<{ eventId: string }> = ({ eventId }) => {
     fetchEvent();
   }, []);
 
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = ('0' + (date.getMonth() + 1)).slice(-2); // getMonth() is zero-indexed, so we add one
+    const day = ('0' + date.getDate()).slice(-2);
+    const hours = ('0' + date.getHours()).slice(-2);
+    const minutes = ('0' + date.getMinutes()).slice(-2);
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+  };
+
   const formik = useFormik({
     initialValues: {
       name: event?.name,
       description: event?.description,
-      date: event?.date,
+      date: formatDate(event?.date),
       city: event?.city,
     },
     enableReinitialize: true,
@@ -39,7 +50,6 @@ const EditEvent: React.FC<{ eventId: string }> = ({ eventId }) => {
       alert(JSON.stringify(values, null, 2));
     },
   });
-
   if (!event) {
     return <></>;
   }
@@ -77,7 +87,7 @@ const EditEvent: React.FC<{ eventId: string }> = ({ eventId }) => {
                   name="name"
                   placeholder="Event Title"
                   onChange={formik.handleChange}
-                  value={formik.values.email}
+                  value={formik.values.name}
                 />
               </FormControl>
               <FormControl>
@@ -87,7 +97,7 @@ const EditEvent: React.FC<{ eventId: string }> = ({ eventId }) => {
                   placeholder="Description"
                   onChange={formik.handleChange}
                   resize="none"
-                  //   value={formik.values.email}
+                  value={formik.values.description}
                 />
               </FormControl>
               <FormControl>
@@ -98,18 +108,22 @@ const EditEvent: React.FC<{ eventId: string }> = ({ eventId }) => {
                     placeholder="Event date"
                     type="datetime-local"
                     onChange={formik.handleChange}
-                    //   value={formik.values.email}
+                    value={formik.values.date}
                   />
                 </InputGroup>
               </FormControl>
               <FormControl>
-                <Input
-                  id="location"
-                  name="location"
+                <Select
+                  id="city"
+                  name="city"
                   placeholder="Event location"
                   onChange={formik.handleChange}
-                  //   value={formik.values.email}
-                />
+                  value={formik.values.city}
+                >
+                  <option value="Madrid">Madrid</option>
+                  <option value="option2">Option 2</option>
+                  <option value="option3">Option 3</option>
+                </Select>
               </FormControl>
             </VStack>
           </Stack>

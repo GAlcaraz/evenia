@@ -78,6 +78,27 @@ const eveniaTheme = extendTheme({
         size: 'lg',
       },
     },
+    Select: {
+      baseStyle: {
+        field: {
+          bg: 'text.whiteGrey',
+          placeholderColor: 'text.grey',
+        },
+      },
+      sizes: {
+        lg: {
+          field: {
+            background: 'text.whiteGrey',
+            padding: 4,
+            height: '62px',
+            borderRadius: 100,
+          },
+        },
+      },
+      defaultProps: {
+        size: 'lg',
+      },
+    },
     Textarea: {
       baseStyle: {
         bg: 'text.whiteGrey',
