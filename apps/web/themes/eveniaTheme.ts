@@ -46,7 +46,8 @@ const eveniaTheme = extendTheme({
       },
       sizes: {
         lg: {
-          padding: 4,
+          px: '24px',
+          py: '16px',
           background: 'primary.majorelle',
           textColor: 'text.white',
           height: '59px',

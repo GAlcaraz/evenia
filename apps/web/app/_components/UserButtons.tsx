@@ -8,12 +8,11 @@ import Link from 'next/link';
 export const LoginButton = () => {
   return (
     <Button
-      style={{ marginRight: 10 }}
       onClick={() => {
         signIn();
       }}
     >
-      Sign in
+      Connect
     </Button>
   );
 };

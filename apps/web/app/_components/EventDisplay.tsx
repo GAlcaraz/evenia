@@ -7,6 +7,7 @@ import {
   Text,
   VStack,
   Stack,
+  Button,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { gql } from '../../data-access/graphql-client';
@@ -46,6 +47,7 @@ const EventDisplay: React.FC<{ eventId: string }> = ({ eventId }) => {
               <Text>${Math.floor(Math.random() * 100)}</Text>
               <Text pl={6}>{event?.owner || 'Dummy'}</Text>
             </HStack>
+            <Button>Register</Button>
           </VStack>
         </Flex>
       </Stack>

@@ -1,4 +1,3 @@
-import { getToken } from 'next-auth/jwt';
 import Events from './_components/Events';
 
 export default async function Index() {
