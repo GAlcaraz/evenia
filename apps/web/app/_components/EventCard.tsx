@@ -31,7 +31,7 @@ const EventCard: React.FC<EventCardProps> = ({
 }) => {
   return (
     <Link href={`/events/${event.id}`} style={{ textDecoration: 'none' }}>
-      <Card overflow="hidden">
+      <Card overflow="hidden" maxW={imgWidth}>
         <Box>
           <Image
             src={`https://source.unsplash.com/random/${imgWidth}x${imgHeight}?sig=${Math.floor(

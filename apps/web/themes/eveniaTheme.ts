@@ -38,6 +38,25 @@ const eveniaTheme = extendTheme({
       background: '#000C29',
     },
   },
+  components: {
+    Input: {
+      baseStyle: {
+        field: {
+          background: 'text.whiteGrey',
+          placeholderColor: 'text.grey',
+        },
+      },
+      sizes: {
+        lg: {
+          field: {
+            padding: 4,
+            height: '62px',
+            borderRadius: 100,
+          },
+        },
+      },
+    },
+  },
   fonts: {
     heading: `'Poppins', sans-serif`,
     body: `'Poppins', sans-serif`,
