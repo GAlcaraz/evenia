@@ -24,7 +24,7 @@ export type GetEventVariables = Types.Exact<{
 }>;
 
 
-export type GetEvent = { __typename?: 'Query', event: { __typename?: 'Event', name: string, id: string, date: any, description?: string | null, city: Types.City, isOwner: boolean } };
+export type GetEvent = { __typename?: 'Query', event: { __typename?: 'Event', name: string, id: string, date: any, description?: string | null, city: Types.City, isOwner?: boolean | null } };
 
 export type CreateEventVariables = Types.Exact<{
   ownerEmail?: Types.InputMaybe<Types.Scalars['String']['input']>;
@@ -36,6 +36,13 @@ export type CreateEventVariables = Types.Exact<{
 
 
 export type CreateEvent = { __typename?: 'Mutation', createEvent: { __typename?: 'Event', name: string, id: string, date: any, description?: string | null, city: Types.City } };
+
+export type DeleteEventVariables = Types.Exact<{
+  id: Types.Scalars['String']['input'];
+}>;
+
+
+export type DeleteEvent = { __typename?: 'Mutation', removeEvent: { __typename?: 'Event', id: string } };
 
 export type ValidateUserVariables = Types.Exact<{
   email: Types.Scalars['String']['input'];
@@ -96,6 +103,13 @@ export const CreateEventDocument = /*#__PURE__*/ gql`
   }
 }
     `;
+export const DeleteEventDocument = /*#__PURE__*/ gql`
+    mutation DeleteEvent($id: String!) {
+  removeEvent(where: {id: $id}) {
+    id
+  }
+}
+    `;
 export const ValidateUserDocument = /*#__PURE__*/ gql`
     query ValidateUser($email: String!, $password: String!) {
   validateUser(email: $email, password: $password)
@@ -120,6 +134,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     CreateEvent(variables: CreateEventVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<CreateEvent> {
       return withWrapper((wrappedRequestHeaders) => client.request<CreateEvent>(CreateEventDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'CreateEvent', 'mutation');
+    },
+    DeleteEvent(variables: DeleteEventVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<DeleteEvent> {
+      return withWrapper((wrappedRequestHeaders) => client.request<DeleteEvent>(DeleteEventDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'DeleteEvent', 'mutation');
     },
     ValidateUser(variables: ValidateUserVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<ValidateUser> {
       return withWrapper((wrappedRequestHeaders) => client.request<ValidateUser>(ValidateUserDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'ValidateUser', 'query');

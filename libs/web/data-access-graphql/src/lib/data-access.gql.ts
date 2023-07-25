@@ -72,6 +72,14 @@ const CREATE_EVENT = gql`
   }
 `;
 
+const DELETE_EVENT = gql`
+  mutation DeleteEvent($id: String!) {
+    removeEvent(where: { id: $id }) {
+      id
+    }
+  }
+`;
+
 const VALIDATE_USER = gql`
   query ValidateUser($email: String!, $password: String!) {
     validateUser(email: $email, password: $password)

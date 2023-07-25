@@ -11,6 +11,10 @@ export class UserGuard implements CanActivate {
     const ctx = GqlExecutionContext.create(context);
     const request = ctx.getContext().req;
     const token = request.headers.authorization;
+    if (!token) {
+      request['user'] = '';
+      return true;
+    }
     try {
       const payload = await this.jwtService.verifyAsync(token, {
         secret: jwtConstants.secret,

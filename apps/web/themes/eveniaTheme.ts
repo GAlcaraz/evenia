@@ -62,6 +62,10 @@ const eveniaTheme = extendTheme({
           borderWidth: '2px',
           background: 'text.white',
         },
+        critical: {
+          textColor: 'text.white',
+          background: 'text.critical',
+        },
       },
       defaultProps: {
         size: 'lg',
