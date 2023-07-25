@@ -2,7 +2,7 @@ import React from 'react';
 
 import EventDisplay from '../../_components/EventDisplay';
 
-const Events = async ({ params }: { params: { slug: string } }) => {
+const EventSlug = async ({ params }: { params: { slug: string } }) => {
   return (
     <div>
       <EventDisplay eventId={params.slug} />
@@ -10,4 +10,4 @@ const Events = async ({ params }: { params: { slug: string } }) => {
   );
 };
 
-export default Events;
+export default EventSlug;
