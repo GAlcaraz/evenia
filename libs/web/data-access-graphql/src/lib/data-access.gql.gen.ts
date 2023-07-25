@@ -19,6 +19,13 @@ export type UpdateEventVariables = Types.Exact<{
 
 export type UpdateEvent = { __typename?: 'Mutation', updateEvent: { __typename?: 'Event', name: string, id: string, date: any, description?: string | null, city: Types.City } };
 
+export type GetEventVariables = Types.Exact<{
+  id: Types.Scalars['String']['input'];
+}>;
+
+
+export type GetEvent = { __typename?: 'Query', event: { __typename?: 'Event', name: string, id: string, date: any, description?: string | null, city: Types.City } };
+
 export type CreateEventVariables = Types.Exact<{
   name?: Types.InputMaybe<Types.Scalars['String']['input']>;
   date?: Types.InputMaybe<Types.Scalars['DateTime']['input']>;
@@ -63,6 +70,17 @@ export const UpdateEventDocument = /*#__PURE__*/ gql`
   }
 }
     `;
+export const GetEventDocument = /*#__PURE__*/ gql`
+    query GetEvent($id: String!) {
+  event(where: {id: $id}) {
+    name
+    id
+    date
+    description
+    city
+  }
+}
+    `;
 export const CreateEventDocument = /*#__PURE__*/ gql`
     mutation CreateEvent($name: String, $date: DateTime, $description: String, $city: String) {
   createEvent(
@@ -94,6 +112,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     UpdateEvent(variables: UpdateEventVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<UpdateEvent> {
       return withWrapper((wrappedRequestHeaders) => client.request<UpdateEvent>(UpdateEventDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'UpdateEvent', 'mutation');
+    },
+    GetEvent(variables: GetEventVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetEvent> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetEvent>(GetEventDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetEvent', 'query');
     },
     CreateEvent(variables?: CreateEventVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<CreateEvent> {
       return withWrapper((wrappedRequestHeaders) => client.request<CreateEvent>(CreateEventDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'CreateEvent', 'mutation');

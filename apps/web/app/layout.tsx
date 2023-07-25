@@ -17,7 +17,7 @@ export default function RootLayout({
       <body>
         <AppProvider>
           <Header />
-          {children}
+          <div style={{ minHeight: '75vh' }}>{children}</div>
           <Footer />
         </AppProvider>
       </body>

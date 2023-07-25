@@ -18,6 +18,7 @@ import { SearchIcon } from '@chakra-ui/icons';
 import EveniaLogo from '../../public/Logo.png';
 import Image from 'next/image';
 import React from 'react';
+import { LoginButton } from './UserButtons';
 
 const Header = () => {
   const { isOpen, onToggle } = useDisclosure();
@@ -38,8 +39,8 @@ const Header = () => {
     <Box w="100%">
       <Flex
         minH={'102px'}
-        px={80}
-        py={20}
+        px={20}
+        py={5}
         borderBottom={1}
         align="center"
         justify="space-between"
@@ -61,19 +62,21 @@ const Header = () => {
         </Flex>
         <Stack>
           <InputGroup dir="row" size="lg">
-            <InputLeftElement h="full" top={14} left={6}>
-              <SearchIcon color="gray.300" />
+            <InputLeftElement>
+              <SearchIcon color="text.grey" />
             </InputLeftElement>
             <Input
               p={4}
-              pl={30}
+              pl="40px"
               bg="#F6F6F6"
               height="42px"
               width="400px"
               borderRadius={100}
               placeholder="Search events"
+              color="text.grey"
             />
           </InputGroup>
+          <LoginButton />
         </Stack>
 
         <Flex
@@ -90,78 +93,76 @@ const Header = () => {
         </Flex>
       </Flex>
 
-      <Collapse in={isOpen}>
-        <MobileNav navItems={navItems} />
-      </Collapse>
+      <Collapse in={isOpen}>{/* <MobileNav navItems={navItems} /> */}</Collapse>
     </Box>
   );
 };
 
-const DesktopNav = ({ navItems }) => {
-  return (
-    <Stack justify="space-between" align="center" direction={'row'} spacing={4}>
-      {navItems.map((item) => (
-        <Box cursor="pointer" key={item.label}>
-          <Link href={item.href ?? '#'}>
-            <Text
-              transition="ease-in-out"
-              transitionDuration="300ms"
-              _hover={{
-                color: 'orange.700',
-              }}
-              _after={{
-                content: '""',
-                height: '1px',
-                backgroundColor: 'orange.900',
-              }}
-              fontWeight={500}
-            >
-              {item.label}
-            </Text>
-          </Link>
-        </Box>
-      ))}
-    </Stack>
-  );
-};
+// const DesktopNav = ({ navItems }) => {
+//   return (
+//     <Stack justify="space-between" align="center" direction={'row'} spacing={4}>
+//       {navItems.map((item) => (
+//         <Box cursor="pointer" key={item.label}>
+//           <Link href={item.href ?? '#'}>
+//             <Text
+//               transition="ease-in-out"
+//               transitionDuration="300ms"
+//               _hover={{
+//                 color: 'orange.700',
+//               }}
+//               _after={{
+//                 content: '""',
+//                 height: '1px',
+//                 backgroundColor: 'orange.900',
+//               }}
+//               fontWeight={500}
+//             >
+//               {item.label}
+//             </Text>
+//           </Link>
+//         </Box>
+//       ))}
+//     </Stack>
+//   );
+// };
 
-const MobileNav = ({ navItems }) => {
-  return (
-    <Stack
-      justify="center"
-      align="center"
-      p={4}
-      bg="orange.600"
-      borderBottomRadius="md"
-      display={{ base: 'flex', sm: 'none' }}
-    >
-      {navItems.map((navItem) => (
-        <Flex
-          cursor="pointer"
-          key={navItem.label}
-          py={2}
-          justify="space-between"
-          align="center"
-        >
-          <Link href={navItem.href}>
-            <Text
-              fontWeight={600}
-              transition="ease-in-out"
-              transitionDuration="300ms"
-              _after={{
-                content: '""',
-                height: '1px',
+// const MobileNav = ({ navItems }) => {
+//   return (
+//     <Stack
+//       justify="center"
+//       align="center"
+//       p={4}
+//       bg="orange.600"
+//       borderBottomRadius="md"
+//       display={{ base: 'flex', sm: 'none' }}
+//     >
+//       {navItems.map((navItem) => (
+//         <Flex
+//           cursor="pointer"
+//           key={navItem.label}
+//           py={2}
+//           justify="space-between"
+//           align="center"
+//         >
+//           <Link href={navItem.href}>
+//             <Text
+//               fontWeight={600}
+//               transition="ease-in-out"
+//               transitionDuration="300ms"
+//               _after={{
+//                 content: '""',
+//                 height: '1px',
 
-                backgroundColor: 'orange.900',
-              }}
-            >
-              {navItem.label}
-            </Text>
-          </Link>
-        </Flex>
-      ))}
-    </Stack>
-  );
-};
+//                 backgroundColor: 'orange.900',
+//               }}
+//             >
+//               {navItem.label}
+//             </Text>
+//           </Link>
+//         </Flex>
+//       ))}
+//     </Stack>
+//   );
+// };
 
 export default Header;

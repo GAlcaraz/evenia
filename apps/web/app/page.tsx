@@ -9,13 +9,7 @@ export default async function Index() {
    */
 
   return (
-    <main
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
-    >
+    <main>
       <div>
         <Events />
       </div>

@@ -33,6 +33,18 @@ const UPDATE_EVENT = gql`
   }
 `;
 
+const GET_EVENT = gql`
+  query GetEvent($id: String!) {
+    event(where: { id: $id }) {
+      name
+      id
+      date
+      description
+      city
+    }
+  }
+`;
+
 const CREATE_EVENT = gql`
   mutation CreateEvent(
     $name: String
