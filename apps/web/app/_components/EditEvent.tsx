@@ -12,6 +12,7 @@ import {
   Stack,
   InputGroup,
   Select,
+  useToast,
 } from '@chakra-ui/react';
 import { useFormik } from 'formik';
 import { useEffect, useState } from 'react';
@@ -19,10 +20,14 @@ import { gql } from '../../data-access/graphql-client';
 import { AddIcon } from '@chakra-ui/icons';
 import { Event } from '../_models/event';
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 const EditEvent: React.FC<{ eventId?: string }> = ({ eventId }) => {
   const [event, setEvent] = useState<Event>();
   const { data: session } = useSession();
+  const router = useRouter();
+  const toast = useToast();
+
   useEffect(() => {
     async function fetchEvent() {
       if (eventId) {
@@ -51,7 +56,6 @@ const EditEvent: React.FC<{ eventId?: string }> = ({ eventId }) => {
     },
     enableReinitialize: true,
     onSubmit: async (values) => {
-      alert(JSON.stringify(values, null, 2));
       const { token } = await (await fetch('/api/token')).json();
       if (event) {
         gql.UpdateEvent(
@@ -60,6 +64,12 @@ const EditEvent: React.FC<{ eventId?: string }> = ({ eventId }) => {
             authorization: token,
           }
         );
+        toast({
+          title: 'Event updated',
+          status: 'success',
+          isClosable: true,
+          position: 'top',
+        });
       } else {
         gql.CreateEvent(
           {
@@ -70,7 +80,14 @@ const EditEvent: React.FC<{ eventId?: string }> = ({ eventId }) => {
             authorization: token,
           }
         );
+        toast({
+          title: 'Event created',
+          status: 'success',
+          isClosable: true,
+          position: 'top',
+        });
       }
+      router.push('/');
     },
   });
 
