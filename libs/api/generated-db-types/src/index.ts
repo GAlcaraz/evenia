@@ -52,7 +52,8 @@ export enum EventScalarFieldEnum {
     name = "name",
     date = "date",
     city = "city",
-    description = "description"
+    description = "description",
+    ownerId = "ownerId"
 }
 
 registerEnumType(EventScalarFieldEnum, { name: 'EventScalarFieldEnum', description: undefined })
@@ -141,6 +142,8 @@ export class EventCountAggregateInput {
     @Field(() => Boolean, {nullable:true})
     description?: true;
     @Field(() => Boolean, {nullable:true})
+    ownerId?: true;
+    @Field(() => Boolean, {nullable:true})
     _all?: true;
 }
 
@@ -157,6 +160,8 @@ export class EventCountAggregate {
     @Field(() => Int, {nullable:false})
     description!: number;
     @Field(() => Int, {nullable:false})
+    ownerId!: number;
+    @Field(() => Int, {nullable:false})
     _all!: number;
 }
 
@@ -172,10 +177,91 @@ export class EventCountOrderByAggregateInput {
     city?: keyof typeof SortOrder;
     @Field(() => SortOrder, {nullable:true})
     description?: keyof typeof SortOrder;
+    @Field(() => SortOrder, {nullable:true})
+    ownerId?: keyof typeof SortOrder;
+}
+
+@InputType()
+export class EventCreateManyOwnerInputEnvelope {
+    @Field(() => [EventCreateManyOwnerInput], {nullable:false})
+    @Type(() => EventCreateManyOwnerInput)
+    data!: Array<EventCreateManyOwnerInput>;
+    @Field(() => Boolean, {nullable:true})
+    skipDuplicates?: boolean;
+}
+
+@InputType()
+export class EventCreateManyOwnerInput {
+    @Field(() => String, {nullable:true})
+    id?: string;
+    @Field(() => String, {nullable:false})
+    @Validator.IsString()
+    @Validator.MaxLength(100)
+    @Validator.MinLength(2)
+    name!: string;
+    @Field(() => Date, {nullable:false})
+    @Validator.IsDate()
+    date!: Date | string;
+    @Field(() => City, {nullable:false})
+    @Validator.IsEnum(City)
+    city!: keyof typeof City;
+    @Field(() => String, {nullable:true})
+    @Validator.IsString()
+    @Validator.MaxLength(1000)
+    description?: string;
 }
 
 @InputType()
 export class EventCreateManyInput {
+    @Field(() => String, {nullable:true})
+    id?: string;
+    @Field(() => String, {nullable:false})
+    @Validator.IsString()
+    @Validator.MaxLength(100)
+    @Validator.MinLength(2)
+    name!: string;
+    @Field(() => Date, {nullable:false})
+    @Validator.IsDate()
+    date!: Date | string;
+    @Field(() => City, {nullable:false})
+    @Validator.IsEnum(City)
+    city!: keyof typeof City;
+    @Field(() => String, {nullable:true})
+    @Validator.IsString()
+    @Validator.MaxLength(1000)
+    description?: string;
+    @Field(() => String, {nullable:false})
+    ownerId!: string;
+}
+
+@InputType()
+export class EventCreateNestedManyWithoutOwnerInput {
+    @Field(() => [EventCreateWithoutOwnerInput], {nullable:true})
+    @Type(() => EventCreateWithoutOwnerInput)
+    create?: Array<EventCreateWithoutOwnerInput>;
+    @Field(() => [EventCreateOrConnectWithoutOwnerInput], {nullable:true})
+    @Type(() => EventCreateOrConnectWithoutOwnerInput)
+    connectOrCreate?: Array<EventCreateOrConnectWithoutOwnerInput>;
+    @Field(() => EventCreateManyOwnerInputEnvelope, {nullable:true})
+    @Type(() => EventCreateManyOwnerInputEnvelope)
+    createMany?: InstanceType<typeof EventCreateManyOwnerInputEnvelope>;
+    @Field(() => [EventWhereUniqueInput], {nullable:true})
+    @Type(() => EventWhereUniqueInput)
+    connect?: Array<EventWhereUniqueInput>;
+}
+
+@InputType()
+export class EventCreateOrConnectWithoutOwnerInput {
+    @Field(() => EventWhereUniqueInput, {nullable:false})
+    @Type(() => EventWhereUniqueInput)
+    where!: InstanceType<typeof EventWhereUniqueInput>;
+    @Field(() => EventCreateWithoutOwnerInput, {nullable:false})
+    @Type(() => EventCreateWithoutOwnerInput)
+    create!: InstanceType<typeof EventCreateWithoutOwnerInput>;
+}
+
+@InputType()
+export class EventCreateWithoutOwnerInput {
     @Field(() => String, {nullable:true})
     id?: string;
     @Field(() => String, {nullable:false})
@@ -214,6 +300,8 @@ export class EventCreateInput {
     @Validator.IsString()
     @Validator.MaxLength(1000)
     description?: string;
+    @Field(() => UserCreateNestedOneWithoutEventsInput, {nullable:false})
+    owner!: InstanceType<typeof UserCreateNestedOneWithoutEventsInput>;
 }
 
 @ArgsType()
@@ -259,12 +347,24 @@ export class EventGroupBy {
     @Validator.IsString()
     @Validator.MaxLength(1000)
     description?: string;
+    @Field(() => String, {nullable:false})
+    ownerId!: string;
     @Field(() => EventCountAggregate, {nullable:true})
     _count?: InstanceType<typeof EventCountAggregate>;
     @Field(() => EventMinAggregate, {nullable:true})
     _min?: InstanceType<typeof EventMinAggregate>;
     @Field(() => EventMaxAggregate, {nullable:true})
     _max?: InstanceType<typeof EventMaxAggregate>;
+}
+
+@InputType()
+export class EventListRelationFilter {
+    @Field(() => EventWhereInput, {nullable:true})
+    every?: InstanceType<typeof EventWhereInput>;
+    @Field(() => EventWhereInput, {nullable:true})
+    some?: InstanceType<typeof EventWhereInput>;
+    @Field(() => EventWhereInput, {nullable:true})
+    none?: InstanceType<typeof EventWhereInput>;
 }
 
 @InputType()
@@ -279,6 +379,8 @@ export class EventMaxAggregateInput {
     city?: true;
     @Field(() => Boolean, {nullable:true})
     description?: true;
+    @Field(() => Boolean, {nullable:true})
+    ownerId?: true;
 }
 
 @ObjectType()
@@ -300,6 +402,8 @@ export class EventMaxAggregate {
     @Validator.IsString()
     @Validator.MaxLength(1000)
     description?: string;
+    @Field(() => String, {nullable:true})
+    ownerId?: string;
 }
 
 @InputType()
@@ -314,6 +418,8 @@ export class EventMaxOrderByAggregateInput {
     city?: keyof typeof SortOrder;
     @Field(() => SortOrder, {nullable:true})
     description?: keyof typeof SortOrder;
+    @Field(() => SortOrder, {nullable:true})
+    ownerId?: keyof typeof SortOrder;
 }
 
 @InputType()
@@ -328,6 +434,8 @@ export class EventMinAggregateInput {
     city?: true;
     @Field(() => Boolean, {nullable:true})
     description?: true;
+    @Field(() => Boolean, {nullable:true})
+    ownerId?: true;
 }
 
 @ObjectType()
@@ -349,6 +457,8 @@ export class EventMinAggregate {
     @Validator.IsString()
     @Validator.MaxLength(1000)
     description?: string;
+    @Field(() => String, {nullable:true})
+    ownerId?: string;
 }
 
 @InputType()
@@ -363,6 +473,14 @@ export class EventMinOrderByAggregateInput {
     city?: keyof typeof SortOrder;
     @Field(() => SortOrder, {nullable:true})
     description?: keyof typeof SortOrder;
+    @Field(() => SortOrder, {nullable:true})
+    ownerId?: keyof typeof SortOrder;
+}
+
+@InputType()
+export class EventOrderByRelationAggregateInput {
+    @Field(() => SortOrder, {nullable:true})
+    _count?: keyof typeof SortOrder;
 }
 
 @InputType()
@@ -377,6 +495,8 @@ export class EventOrderByWithAggregationInput {
     city?: keyof typeof SortOrder;
     @Field(() => SortOrderInput, {nullable:true})
     description?: InstanceType<typeof SortOrderInput>;
+    @Field(() => SortOrder, {nullable:true})
+    ownerId?: keyof typeof SortOrder;
     @Field(() => EventCountOrderByAggregateInput, {nullable:true})
     _count?: InstanceType<typeof EventCountOrderByAggregateInput>;
     @Field(() => EventMaxOrderByAggregateInput, {nullable:true})
@@ -397,6 +517,10 @@ export class EventOrderByWithRelationInput {
     city?: keyof typeof SortOrder;
     @Field(() => SortOrderInput, {nullable:true})
     description?: InstanceType<typeof SortOrderInput>;
+    @Field(() => SortOrder, {nullable:true})
+    ownerId?: keyof typeof SortOrder;
+    @Field(() => UserOrderByWithRelationInput, {nullable:true})
+    owner?: InstanceType<typeof UserOrderByWithRelationInput>;
 }
 
 @InputType()
@@ -417,6 +541,67 @@ export class EventScalarWhereWithAggregatesInput {
     city?: InstanceType<typeof EnumCityWithAggregatesFilter>;
     @Field(() => StringWithAggregatesFilter, {nullable:true})
     description?: InstanceType<typeof StringWithAggregatesFilter>;
+    @Field(() => StringWithAggregatesFilter, {nullable:true})
+    ownerId?: InstanceType<typeof StringWithAggregatesFilter>;
+}
+
+@InputType()
+export class EventScalarWhereInput {
+    @Field(() => [EventScalarWhereInput], {nullable:true})
+    AND?: Array<EventScalarWhereInput>;
+    @Field(() => [EventScalarWhereInput], {nullable:true})
+    OR?: Array<EventScalarWhereInput>;
+    @Field(() => [EventScalarWhereInput], {nullable:true})
+    NOT?: Array<EventScalarWhereInput>;
+    @Field(() => StringFilter, {nullable:true})
+    id?: InstanceType<typeof StringFilter>;
+    @Field(() => StringFilter, {nullable:true})
+    name?: InstanceType<typeof StringFilter>;
+    @Field(() => DateTimeFilter, {nullable:true})
+    date?: InstanceType<typeof DateTimeFilter>;
+    @Field(() => EnumCityFilter, {nullable:true})
+    city?: InstanceType<typeof EnumCityFilter>;
+    @Field(() => StringFilter, {nullable:true})
+    description?: InstanceType<typeof StringFilter>;
+    @Field(() => StringFilter, {nullable:true})
+    ownerId?: InstanceType<typeof StringFilter>;
+}
+
+@InputType()
+export class EventUncheckedCreateNestedManyWithoutOwnerInput {
+    @Field(() => [EventCreateWithoutOwnerInput], {nullable:true})
+    @Type(() => EventCreateWithoutOwnerInput)
+    create?: Array<EventCreateWithoutOwnerInput>;
+    @Field(() => [EventCreateOrConnectWithoutOwnerInput], {nullable:true})
+    @Type(() => EventCreateOrConnectWithoutOwnerInput)
+    connectOrCreate?: Array<EventCreateOrConnectWithoutOwnerInput>;
+    @Field(() => EventCreateManyOwnerInputEnvelope, {nullable:true})
+    @Type(() => EventCreateManyOwnerInputEnvelope)
+    createMany?: InstanceType<typeof EventCreateManyOwnerInputEnvelope>;
+    @Field(() => [EventWhereUniqueInput], {nullable:true})
+    @Type(() => EventWhereUniqueInput)
+    connect?: Array<EventWhereUniqueInput>;
+}
+
+@InputType()
+export class EventUncheckedCreateWithoutOwnerInput {
+    @Field(() => String, {nullable:true})
+    id?: string;
+    @Field(() => String, {nullable:false})
+    @Validator.IsString()
+    @Validator.MaxLength(100)
+    @Validator.MinLength(2)
+    name!: string;
+    @Field(() => Date, {nullable:false})
+    @Validator.IsDate()
+    date!: Date | string;
+    @Field(() => City, {nullable:false})
+    @Validator.IsEnum(City)
+    city!: keyof typeof City;
+    @Field(() => String, {nullable:true})
+    @Validator.IsString()
+    @Validator.MaxLength(1000)
+    description?: string;
 }
 
 @InputType()
@@ -438,10 +623,93 @@ export class EventUncheckedCreateInput {
     @Validator.IsString()
     @Validator.MaxLength(1000)
     description?: string;
+    @Field(() => String, {nullable:false})
+    ownerId!: string;
+}
+
+@InputType()
+export class EventUncheckedUpdateManyWithoutEventsInput {
+    @Field(() => String, {nullable:true})
+    id?: string;
+    @Field(() => String, {nullable:true})
+    @Validator.IsString()
+    @Validator.MaxLength(100)
+    @Validator.MinLength(2)
+    name?: string;
+    @Field(() => Date, {nullable:true})
+    @Validator.IsDate()
+    date?: Date | string;
+    @Field(() => City, {nullable:true})
+    @Validator.IsEnum(City)
+    city?: keyof typeof City;
+    @Field(() => String, {nullable:true})
+    @Validator.IsString()
+    @Validator.MaxLength(1000)
+    description?: string;
+}
+
+@InputType()
+export class EventUncheckedUpdateManyWithoutOwnerNestedInput {
+    @Field(() => [EventCreateWithoutOwnerInput], {nullable:true})
+    @Type(() => EventCreateWithoutOwnerInput)
+    create?: Array<EventCreateWithoutOwnerInput>;
+    @Field(() => [EventCreateOrConnectWithoutOwnerInput], {nullable:true})
+    @Type(() => EventCreateOrConnectWithoutOwnerInput)
+    connectOrCreate?: Array<EventCreateOrConnectWithoutOwnerInput>;
+    @Field(() => [EventUpsertWithWhereUniqueWithoutOwnerInput], {nullable:true})
+    @Type(() => EventUpsertWithWhereUniqueWithoutOwnerInput)
+    upsert?: Array<EventUpsertWithWhereUniqueWithoutOwnerInput>;
+    @Field(() => EventCreateManyOwnerInputEnvelope, {nullable:true})
+    @Type(() => EventCreateManyOwnerInputEnvelope)
+    createMany?: InstanceType<typeof EventCreateManyOwnerInputEnvelope>;
+    @Field(() => [EventWhereUniqueInput], {nullable:true})
+    @Type(() => EventWhereUniqueInput)
+    set?: Array<EventWhereUniqueInput>;
+    @Field(() => [EventWhereUniqueInput], {nullable:true})
+    @Type(() => EventWhereUniqueInput)
+    disconnect?: Array<EventWhereUniqueInput>;
+    @Field(() => [EventWhereUniqueInput], {nullable:true})
+    @Type(() => EventWhereUniqueInput)
+    delete?: Array<EventWhereUniqueInput>;
+    @Field(() => [EventWhereUniqueInput], {nullable:true})
+    @Type(() => EventWhereUniqueInput)
+    connect?: Array<EventWhereUniqueInput>;
+    @Field(() => [EventUpdateWithWhereUniqueWithoutOwnerInput], {nullable:true})
+    @Type(() => EventUpdateWithWhereUniqueWithoutOwnerInput)
+    update?: Array<EventUpdateWithWhereUniqueWithoutOwnerInput>;
+    @Field(() => [EventUpdateManyWithWhereWithoutOwnerInput], {nullable:true})
+    @Type(() => EventUpdateManyWithWhereWithoutOwnerInput)
+    updateMany?: Array<EventUpdateManyWithWhereWithoutOwnerInput>;
+    @Field(() => [EventScalarWhereInput], {nullable:true})
+    @Type(() => EventScalarWhereInput)
+    deleteMany?: Array<EventScalarWhereInput>;
 }
 
 @InputType()
 export class EventUncheckedUpdateManyInput {
+    @Field(() => String, {nullable:true})
+    id?: string;
+    @Field(() => String, {nullable:true})
+    @Validator.IsString()
+    @Validator.MaxLength(100)
+    @Validator.MinLength(2)
+    name?: string;
+    @Field(() => Date, {nullable:true})
+    @Validator.IsDate()
+    date?: Date | string;
+    @Field(() => City, {nullable:true})
+    @Validator.IsEnum(City)
+    city?: keyof typeof City;
+    @Field(() => String, {nullable:true})
+    @Validator.IsString()
+    @Validator.MaxLength(1000)
+    description?: string;
+    @Field(() => String, {nullable:true})
+    ownerId?: string;
+}
+
+@InputType()
+export class EventUncheckedUpdateWithoutOwnerInput {
     @Field(() => String, {nullable:true})
     id?: string;
     @Field(() => String, {nullable:true})
@@ -480,10 +748,90 @@ export class EventUncheckedUpdateInput {
     @Validator.IsString()
     @Validator.MaxLength(1000)
     description?: string;
+    @Field(() => String, {nullable:true})
+    ownerId?: string;
 }
 
 @InputType()
 export class EventUpdateManyMutationInput {
+    @Field(() => String, {nullable:true})
+    id?: string;
+    @Field(() => String, {nullable:true})
+    @Validator.IsString()
+    @Validator.MaxLength(100)
+    @Validator.MinLength(2)
+    name?: string;
+    @Field(() => Date, {nullable:true})
+    @Validator.IsDate()
+    date?: Date | string;
+    @Field(() => City, {nullable:true})
+    @Validator.IsEnum(City)
+    city?: keyof typeof City;
+    @Field(() => String, {nullable:true})
+    @Validator.IsString()
+    @Validator.MaxLength(1000)
+    description?: string;
+}
+
+@InputType()
+export class EventUpdateManyWithWhereWithoutOwnerInput {
+    @Field(() => EventScalarWhereInput, {nullable:false})
+    @Type(() => EventScalarWhereInput)
+    where!: InstanceType<typeof EventScalarWhereInput>;
+    @Field(() => EventUpdateManyMutationInput, {nullable:false})
+    @Type(() => EventUpdateManyMutationInput)
+    data!: InstanceType<typeof EventUpdateManyMutationInput>;
+}
+
+@InputType()
+export class EventUpdateManyWithoutOwnerNestedInput {
+    @Field(() => [EventCreateWithoutOwnerInput], {nullable:true})
+    @Type(() => EventCreateWithoutOwnerInput)
+    create?: Array<EventCreateWithoutOwnerInput>;
+    @Field(() => [EventCreateOrConnectWithoutOwnerInput], {nullable:true})
+    @Type(() => EventCreateOrConnectWithoutOwnerInput)
+    connectOrCreate?: Array<EventCreateOrConnectWithoutOwnerInput>;
+    @Field(() => [EventUpsertWithWhereUniqueWithoutOwnerInput], {nullable:true})
+    @Type(() => EventUpsertWithWhereUniqueWithoutOwnerInput)
+    upsert?: Array<EventUpsertWithWhereUniqueWithoutOwnerInput>;
+    @Field(() => EventCreateManyOwnerInputEnvelope, {nullable:true})
+    @Type(() => EventCreateManyOwnerInputEnvelope)
+    createMany?: InstanceType<typeof EventCreateManyOwnerInputEnvelope>;
+    @Field(() => [EventWhereUniqueInput], {nullable:true})
+    @Type(() => EventWhereUniqueInput)
+    set?: Array<EventWhereUniqueInput>;
+    @Field(() => [EventWhereUniqueInput], {nullable:true})
+    @Type(() => EventWhereUniqueInput)
+    disconnect?: Array<EventWhereUniqueInput>;
+    @Field(() => [EventWhereUniqueInput], {nullable:true})
+    @Type(() => EventWhereUniqueInput)
+    delete?: Array<EventWhereUniqueInput>;
+    @Field(() => [EventWhereUniqueInput], {nullable:true})
+    @Type(() => EventWhereUniqueInput)
+    connect?: Array<EventWhereUniqueInput>;
+    @Field(() => [EventUpdateWithWhereUniqueWithoutOwnerInput], {nullable:true})
+    @Type(() => EventUpdateWithWhereUniqueWithoutOwnerInput)
+    update?: Array<EventUpdateWithWhereUniqueWithoutOwnerInput>;
+    @Field(() => [EventUpdateManyWithWhereWithoutOwnerInput], {nullable:true})
+    @Type(() => EventUpdateManyWithWhereWithoutOwnerInput)
+    updateMany?: Array<EventUpdateManyWithWhereWithoutOwnerInput>;
+    @Field(() => [EventScalarWhereInput], {nullable:true})
+    @Type(() => EventScalarWhereInput)
+    deleteMany?: Array<EventScalarWhereInput>;
+}
+
+@InputType()
+export class EventUpdateWithWhereUniqueWithoutOwnerInput {
+    @Field(() => EventWhereUniqueInput, {nullable:false})
+    @Type(() => EventWhereUniqueInput)
+    where!: InstanceType<typeof EventWhereUniqueInput>;
+    @Field(() => EventUpdateWithoutOwnerInput, {nullable:false})
+    @Type(() => EventUpdateWithoutOwnerInput)
+    data!: InstanceType<typeof EventUpdateWithoutOwnerInput>;
+}
+
+@InputType()
+export class EventUpdateWithoutOwnerInput {
     @Field(() => String, {nullable:true})
     id?: string;
     @Field(() => String, {nullable:true})
@@ -522,6 +870,21 @@ export class EventUpdateInput {
     @Validator.IsString()
     @Validator.MaxLength(1000)
     description?: string;
+    @Field(() => UserUpdateOneRequiredWithoutEventsNestedInput, {nullable:true})
+    owner?: InstanceType<typeof UserUpdateOneRequiredWithoutEventsNestedInput>;
+}
+
+@InputType()
+export class EventUpsertWithWhereUniqueWithoutOwnerInput {
+    @Field(() => EventWhereUniqueInput, {nullable:false})
+    @Type(() => EventWhereUniqueInput)
+    where!: InstanceType<typeof EventWhereUniqueInput>;
+    @Field(() => EventUpdateWithoutOwnerInput, {nullable:false})
+    @Type(() => EventUpdateWithoutOwnerInput)
+    update!: InstanceType<typeof EventUpdateWithoutOwnerInput>;
+    @Field(() => EventCreateWithoutOwnerInput, {nullable:false})
+    @Type(() => EventCreateWithoutOwnerInput)
+    create!: InstanceType<typeof EventCreateWithoutOwnerInput>;
 }
 
 @InputType()
@@ -548,6 +911,10 @@ export class EventWhereInput {
     city?: InstanceType<typeof EnumCityFilter>;
     @Field(() => StringFilter, {nullable:true})
     description?: InstanceType<typeof StringFilter>;
+    @Field(() => StringFilter, {nullable:true})
+    ownerId?: InstanceType<typeof StringFilter>;
+    @Field(() => UserWhereInput, {nullable:true})
+    owner?: InstanceType<typeof UserWhereInput>;
 }
 
 @ObjectType()
@@ -562,6 +929,10 @@ export class Event {
     city!: keyof typeof City;
     @Field(() => String, {nullable:true})
     description!: string | null;
+    @Field(() => String, {nullable:false})
+    ownerId!: string;
+    @Field(() => User, {nullable:false})
+    owner?: InstanceType<typeof User>;
 }
 
 @ArgsType()
@@ -1054,8 +1425,56 @@ export class UserCountOrderByAggregateInput {
     password?: keyof typeof SortOrder;
 }
 
+@ObjectType()
+export class UserCount {
+    @Field(() => Int, {nullable:false})
+    events?: number;
+}
+
 @InputType()
 export class UserCreateManyInput {
+    @Field(() => String, {nullable:true})
+    id?: string;
+    @Field(() => String, {nullable:false})
+    @Validator.IsEmail()
+    email!: string;
+    @Field(() => String, {nullable:true})
+    @Validator.IsString()
+    @Validator.MaxLength(100)
+    @Validator.MinLength(2)
+    name?: string;
+    @Field(() => String, {nullable:false})
+    @Validator.IsString()
+    @Validator.MaxLength(100)
+    @Validator.MinLength(8)
+    password!: string;
+}
+
+@InputType()
+export class UserCreateNestedOneWithoutEventsInput {
+    @Field(() => UserCreateWithoutEventsInput, {nullable:true})
+    @Type(() => UserCreateWithoutEventsInput)
+    create?: InstanceType<typeof UserCreateWithoutEventsInput>;
+    @Field(() => UserCreateOrConnectWithoutEventsInput, {nullable:true})
+    @Type(() => UserCreateOrConnectWithoutEventsInput)
+    connectOrCreate?: InstanceType<typeof UserCreateOrConnectWithoutEventsInput>;
+    @Field(() => UserWhereUniqueInput, {nullable:true})
+    @Type(() => UserWhereUniqueInput)
+    connect?: InstanceType<typeof UserWhereUniqueInput>;
+}
+
+@InputType()
+export class UserCreateOrConnectWithoutEventsInput {
+    @Field(() => UserWhereUniqueInput, {nullable:false})
+    @Type(() => UserWhereUniqueInput)
+    where!: InstanceType<typeof UserWhereUniqueInput>;
+    @Field(() => UserCreateWithoutEventsInput, {nullable:false})
+    @Type(() => UserCreateWithoutEventsInput)
+    create!: InstanceType<typeof UserCreateWithoutEventsInput>;
+}
+
+@InputType()
+export class UserCreateWithoutEventsInput {
     @Field(() => String, {nullable:true})
     id?: string;
     @Field(() => String, {nullable:false})
@@ -1090,6 +1509,8 @@ export class UserCreateInput {
     @Validator.MaxLength(100)
     @Validator.MinLength(8)
     password!: string;
+    @Field(() => EventCreateNestedManyWithoutOwnerInput, {nullable:true})
+    events?: InstanceType<typeof EventCreateNestedManyWithoutOwnerInput>;
 }
 
 @ArgsType()
@@ -1246,6 +1667,16 @@ export class UserOrderByWithRelationInput {
     name?: InstanceType<typeof SortOrderInput>;
     @Field(() => SortOrder, {nullable:true})
     password?: keyof typeof SortOrder;
+    @Field(() => EventOrderByRelationAggregateInput, {nullable:true})
+    events?: InstanceType<typeof EventOrderByRelationAggregateInput>;
+}
+
+@InputType()
+export class UserRelationFilter {
+    @Field(() => UserWhereInput, {nullable:true})
+    is?: InstanceType<typeof UserWhereInput>;
+    @Field(() => UserWhereInput, {nullable:true})
+    isNot?: InstanceType<typeof UserWhereInput>;
 }
 
 @InputType()
@@ -1267,7 +1698,7 @@ export class UserScalarWhereWithAggregatesInput {
 }
 
 @InputType()
-export class UserUncheckedCreateInput {
+export class UserUncheckedCreateWithoutEventsInput {
     @Field(() => String, {nullable:true})
     id?: string;
     @Field(() => String, {nullable:false})
@@ -1286,7 +1717,47 @@ export class UserUncheckedCreateInput {
 }
 
 @InputType()
+export class UserUncheckedCreateInput {
+    @Field(() => String, {nullable:true})
+    id?: string;
+    @Field(() => String, {nullable:false})
+    @Validator.IsEmail()
+    email!: string;
+    @Field(() => String, {nullable:true})
+    @Validator.IsString()
+    @Validator.MaxLength(100)
+    @Validator.MinLength(2)
+    name?: string;
+    @Field(() => String, {nullable:false})
+    @Validator.IsString()
+    @Validator.MaxLength(100)
+    @Validator.MinLength(8)
+    password!: string;
+    @Field(() => EventUncheckedCreateNestedManyWithoutOwnerInput, {nullable:true})
+    events?: InstanceType<typeof EventUncheckedCreateNestedManyWithoutOwnerInput>;
+}
+
+@InputType()
 export class UserUncheckedUpdateManyInput {
+    @Field(() => String, {nullable:true})
+    id?: string;
+    @Field(() => String, {nullable:true})
+    @Validator.IsEmail()
+    email?: string;
+    @Field(() => String, {nullable:true})
+    @Validator.IsString()
+    @Validator.MaxLength(100)
+    @Validator.MinLength(2)
+    name?: string;
+    @Field(() => String, {nullable:true})
+    @Validator.IsString()
+    @Validator.MaxLength(100)
+    @Validator.MinLength(8)
+    password?: string;
+}
+
+@InputType()
+export class UserUncheckedUpdateWithoutEventsInput {
     @Field(() => String, {nullable:true})
     id?: string;
     @Field(() => String, {nullable:true})
@@ -1321,10 +1792,50 @@ export class UserUncheckedUpdateInput {
     @Validator.MaxLength(100)
     @Validator.MinLength(8)
     password?: string;
+    @Field(() => EventUncheckedUpdateManyWithoutOwnerNestedInput, {nullable:true})
+    events?: InstanceType<typeof EventUncheckedUpdateManyWithoutOwnerNestedInput>;
 }
 
 @InputType()
 export class UserUpdateManyMutationInput {
+    @Field(() => String, {nullable:true})
+    id?: string;
+    @Field(() => String, {nullable:true})
+    @Validator.IsEmail()
+    email?: string;
+    @Field(() => String, {nullable:true})
+    @Validator.IsString()
+    @Validator.MaxLength(100)
+    @Validator.MinLength(2)
+    name?: string;
+    @Field(() => String, {nullable:true})
+    @Validator.IsString()
+    @Validator.MaxLength(100)
+    @Validator.MinLength(8)
+    password?: string;
+}
+
+@InputType()
+export class UserUpdateOneRequiredWithoutEventsNestedInput {
+    @Field(() => UserCreateWithoutEventsInput, {nullable:true})
+    @Type(() => UserCreateWithoutEventsInput)
+    create?: InstanceType<typeof UserCreateWithoutEventsInput>;
+    @Field(() => UserCreateOrConnectWithoutEventsInput, {nullable:true})
+    @Type(() => UserCreateOrConnectWithoutEventsInput)
+    connectOrCreate?: InstanceType<typeof UserCreateOrConnectWithoutEventsInput>;
+    @Field(() => UserUpsertWithoutEventsInput, {nullable:true})
+    @Type(() => UserUpsertWithoutEventsInput)
+    upsert?: InstanceType<typeof UserUpsertWithoutEventsInput>;
+    @Field(() => UserWhereUniqueInput, {nullable:true})
+    @Type(() => UserWhereUniqueInput)
+    connect?: InstanceType<typeof UserWhereUniqueInput>;
+    @Field(() => UserUpdateWithoutEventsInput, {nullable:true})
+    @Type(() => UserUpdateWithoutEventsInput)
+    update?: InstanceType<typeof UserUpdateWithoutEventsInput>;
+}
+
+@InputType()
+export class UserUpdateWithoutEventsInput {
     @Field(() => String, {nullable:true})
     id?: string;
     @Field(() => String, {nullable:true})
@@ -1359,6 +1870,18 @@ export class UserUpdateInput {
     @Validator.MaxLength(100)
     @Validator.MinLength(8)
     password?: string;
+    @Field(() => EventUpdateManyWithoutOwnerNestedInput, {nullable:true})
+    events?: InstanceType<typeof EventUpdateManyWithoutOwnerNestedInput>;
+}
+
+@InputType()
+export class UserUpsertWithoutEventsInput {
+    @Field(() => UserUpdateWithoutEventsInput, {nullable:false})
+    @Type(() => UserUpdateWithoutEventsInput)
+    update!: InstanceType<typeof UserUpdateWithoutEventsInput>;
+    @Field(() => UserCreateWithoutEventsInput, {nullable:false})
+    @Type(() => UserCreateWithoutEventsInput)
+    create!: InstanceType<typeof UserCreateWithoutEventsInput>;
 }
 
 @InputType()
@@ -1386,6 +1909,8 @@ export class UserWhereInput {
     name?: InstanceType<typeof StringFilter>;
     @Field(() => StringFilter, {nullable:true})
     password?: InstanceType<typeof StringFilter>;
+    @Field(() => EventListRelationFilter, {nullable:true})
+    events?: InstanceType<typeof EventListRelationFilter>;
 }
 
 @ObjectType()
@@ -1398,4 +1923,8 @@ export class User {
     name!: string | null;
     @HideField()
     password!: string;
+    @Field(() => [Event], {nullable:true})
+    events?: Array<Event>;
+    @Field(() => UserCount, {nullable:false})
+    _count?: InstanceType<typeof UserCount>;
 }

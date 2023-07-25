@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Context } from '@nestjs/graphql';
 import { EventService } from './event.service';
 import {
   CreateOneEventArgs,
@@ -7,7 +7,7 @@ import {
   UpdateOneEventArgs,
   Event,
 } from '@evenia/api/generated-db-types';
-import { OwnerGuard } from '@evenia/api/feature-auth';
+import { JwtGuard } from '@evenia/api/feature-auth';
 import { UseGuards } from '@nestjs/common';
 
 @Resolver(() => Event)
@@ -15,8 +15,13 @@ export class EventResolver {
   constructor(private readonly eventService: EventService) {}
 
   @Mutation(() => Event)
-  createEvent(@Args() createOneEventArgs: CreateOneEventArgs) {
-    return this.eventService.create(createOneEventArgs);
+  @UseGuards(JwtGuard)
+  createEvent(
+    @Args() createOneEventArgs: CreateOneEventArgs,
+    @Context() context: any
+  ) {
+    const userEmail = context.req.user.email;
+    return this.eventService.create(createOneEventArgs, userEmail);
   }
 
   @Query(() => [Event])
@@ -30,14 +35,24 @@ export class EventResolver {
   }
 
   @Mutation(() => Event)
-  @UseGuards(OwnerGuard)
-  updateEvent(@Args() updateOneEventArgs: UpdateOneEventArgs) {
-    return this.eventService.update(updateOneEventArgs);
+  @UseGuards(JwtGuard)
+  updateEvent(
+    @Args() updateOneEventArgs: UpdateOneEventArgs,
+    @Context() context: any
+  ) {
+    const userEmail = context.req.user.email;
+
+    return this.eventService.update(updateOneEventArgs, userEmail);
   }
 
   @Mutation(() => Event)
-  @UseGuards(OwnerGuard)
-  removeEvent(@Args() deleteOneEventArgs: DeleteOneEventArgs) {
-    return this.eventService.remove(deleteOneEventArgs);
+  @UseGuards(JwtGuard)
+  removeEvent(
+    @Args() deleteOneEventArgs: DeleteOneEventArgs,
+    @Context() context: any
+  ) {
+    const userEmail = context.req.user.email;
+
+    return this.eventService.remove(deleteOneEventArgs, userEmail);
   }
 }
