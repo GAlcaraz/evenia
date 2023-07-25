@@ -1,5 +1,6 @@
-import { NextAuthProvider } from './_components/Providers';
-import './global.css';
+import { Footer } from './_components/Footer';
+import Header from './_components/Header';
+import { AppProvider } from './_components/Providers';
 
 export const metadata = {
   title: 'Welcome to web',
@@ -14,7 +15,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <NextAuthProvider>{children}</NextAuthProvider>
+        <AppProvider>
+          <Header />
+          <div style={{ minHeight: '75vh' }}>{children}</div>
+          <Footer />
+        </AppProvider>
       </body>
     </html>
   );
