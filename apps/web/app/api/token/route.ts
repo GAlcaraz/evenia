@@ -7,9 +7,8 @@ const secret = process.env.NEXTAUTH_SECRET;
 const handler = async function (req: NextApiRequest, res: NextApiResponse) {
   const token = await getToken({ req, secret, raw: true });
 
-  console.log('Token: ', token);
   return new NextResponse(JSON.stringify({ token }), {
-    status: 401,
+    status: 200,
     headers: { 'content-type': 'application/json' },
   });
 };

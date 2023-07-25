@@ -47,13 +47,20 @@ const GET_EVENT = gql`
 
 const CREATE_EVENT = gql`
   mutation CreateEvent(
-    $name: String
-    $date: DateTime
+    $ownerEmail: String
+    $name: String!
+    $date: DateTime!
     $description: String
-    $city: String
+    $city: City!
   ) {
     createEvent(
-      data: { name: $name, date: $date, description: $description, city: $city }
+      data: {
+        owner: { connect: { email: $ownerEmail } }
+        name: $name
+        date: $date
+        description: $description
+        city: $city
+      }
     ) {
       name
       id

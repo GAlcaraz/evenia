@@ -1,21 +1,24 @@
 'use client';
 
-import Link from 'next/link';
 import {
   Box,
   Flex,
+  Link,
   Input,
   InputGroup,
   InputLeftElement,
+  Button,
 } from '@chakra-ui/react';
 import { SearchIcon } from '@chakra-ui/icons';
-
+import NextLink from 'next/link';
 import EveniaLogo from '../../public/Logo.png';
 import Image from 'next/image';
 import React from 'react';
-import { LoginButton } from './UserButtons';
+import { LoginButton, LogoutButton } from './UserButtons';
+import { useSession } from 'next-auth/react';
 
 const Header = () => {
+  const { status } = useSession();
   return (
     <Box w="100%">
       <Flex
@@ -49,7 +52,16 @@ const Header = () => {
             <Input pl="40px" width="400px" placeholder="Search events" />
           </InputGroup>
         </Flex>
-        <LoginButton />
+        {status === 'authenticated' ? (
+          <Flex>
+            <NextLink href="/events/create" passHref>
+              <Button as="a">Create Event</Button>
+            </NextLink>
+            <LogoutButton />
+          </Flex>
+        ) : (
+          <LoginButton />
+        )}
       </Flex>
     </Box>
   );
