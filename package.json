@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
+    "serve:all": "npx concurrently --kill-others-on-fail \"npm:start:*\"",
     "start:api": "nx serve api",
     "start:web": "nx serve web",
     "build": "nx build",
