@@ -50,9 +50,12 @@ const EditEvent: React.FC<{ eventId?: string }> = ({ eventId }) => {
     fetchEvent();
   }, []);
 
-  const formatDate = (date: Date | undefined) => {
+  const formatDate = (date: Date | string | undefined) => {
     if (!date) {
       return null;
+    }
+    if (typeof date === 'string') {
+      date = new Date(date);
     }
     const year = date.getFullYear();
     const month = ('0' + (date.getMonth() + 1)).slice(-2); // getMonth() is zero-indexed, so we add one
