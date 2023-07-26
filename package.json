@@ -12,8 +12,9 @@
     "db:migrate:dev": "npx env-cmd -f .local.env npx prisma migrate dev",
     "db:studio": "npx env-cmd -f .local.env npx prisma studio",
     "gen:gql-web": "graphql-codegen --config tools/graphql-codegen/codegen.yml",
-    "cd:api": "npx nx build api --prod",
-    "cd:web": "npx nx build web --prod"
+    "cd:api": "npm run cd:db-push && npx nx build api --prod",
+    "cd:web": "npx nx build web --prod",
+    "cd:db-push": "npx prisma db push --accept-data-loss"
   },
   "private": true,
   "dependencies": {
