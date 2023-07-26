@@ -11,7 +11,9 @@
     "dockers:dev": "docker-compose -f tools/evenia-environment/dev.docker-compose.yaml up -d --no-recreate --remove-orphans",
     "db:migrate:dev": "npx env-cmd -f .local.env npx prisma migrate dev",
     "db:studio": "npx env-cmd -f .local.env npx prisma studio",
-    "gen:gql-web": "graphql-codegen --config tools/graphql-codegen/codegen.yml"
+    "gen:gql-web": "graphql-codegen --config tools/graphql-codegen/codegen.yml",
+    "cd:api": "npx nx build api --prod",
+    "cd:web": "npx nx build web --prod"
   },
   "private": true,
   "dependencies": {

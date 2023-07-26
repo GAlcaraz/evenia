@@ -16,6 +16,8 @@ import { apiEnv } from './environments/environment';
 
 const { isProd, api } = apiEnv;
 
+const runHost = isProd ? '0.0.0.0' : 'localhost';
+
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
@@ -25,7 +27,7 @@ async function bootstrap() {
   // TODO: Add (fix issue with) helmet for added security
   // await app.register(helmet)
   const port = api.port;
-  await app.listen(port);
+  await app.listen(port, runHost);
   Logger.log(
     `🚀 Playground is running on: http://localhost:${api.port}/graphiql`
   );
