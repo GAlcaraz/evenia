@@ -12,18 +12,27 @@ import {
   Stack,
   InputGroup,
   Select,
+  useToast,
 } from '@chakra-ui/react';
 import { useFormik } from 'formik';
 import { useEffect, useState } from 'react';
 import { gql } from '../../data-access/graphql-client';
 import { AddIcon } from '@chakra-ui/icons';
+import { Event } from '../_models/event';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
-const EditEvent: React.FC<{ eventId: string }> = ({ eventId }) => {
-  const [event, setEvent] = useState<unknown>();
+const EditEvent: React.FC<{ eventId?: string }> = ({ eventId }) => {
+  const [event, setEvent] = useState<Event>();
+  const { data: session } = useSession();
+  const router = useRouter();
+  const toast = useToast();
 
   useEffect(() => {
     async function fetchEvent() {
-      setEvent((await gql.GetEvent({ id: eventId })).event);
+      if (eventId) {
+        setEvent((await gql.GetEvent({ id: eventId })).event);
+      }
     }
     fetchEvent();
   }, []);
@@ -46,13 +55,41 @@ const EditEvent: React.FC<{ eventId: string }> = ({ eventId }) => {
       city: event?.city,
     },
     enableReinitialize: true,
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+    onSubmit: async (values) => {
+      const { token } = await (await fetch('/api/token')).json();
+      if (event) {
+        gql.UpdateEvent(
+          { id: eventId, ...values },
+          {
+            authorization: token,
+          }
+        );
+        toast({
+          title: 'Event updated',
+          status: 'success',
+          isClosable: true,
+          position: 'top',
+        });
+      } else {
+        gql.CreateEvent(
+          {
+            ownerEmail: session?.user?.email,
+            ...values,
+          },
+          {
+            authorization: token,
+          }
+        );
+        toast({
+          title: 'Event created',
+          status: 'success',
+          isClosable: true,
+          position: 'top',
+        });
+      }
+      router.push('/');
     },
   });
-  if (!event) {
-    return <></>;
-  }
 
   return (
     <Flex align="center" justify="center" pt={10}>
@@ -88,6 +125,7 @@ const EditEvent: React.FC<{ eventId: string }> = ({ eventId }) => {
                   placeholder="Event Title"
                   onChange={formik.handleChange}
                   value={formik.values.name}
+                  required
                 />
               </FormControl>
               <FormControl>
@@ -98,6 +136,7 @@ const EditEvent: React.FC<{ eventId: string }> = ({ eventId }) => {
                   onChange={formik.handleChange}
                   resize="none"
                   value={formik.values.description}
+                  required
                 />
               </FormControl>
               <FormControl>
@@ -109,6 +148,7 @@ const EditEvent: React.FC<{ eventId: string }> = ({ eventId }) => {
                     type="datetime-local"
                     onChange={formik.handleChange}
                     value={formik.values.date}
+                    required
                   />
                 </InputGroup>
               </FormControl>
@@ -119,6 +159,7 @@ const EditEvent: React.FC<{ eventId: string }> = ({ eventId }) => {
                   placeholder="Event location"
                   onChange={formik.handleChange}
                   value={formik.values.city}
+                  required
                 >
                   <option value="Madrid">Madrid</option>
                   <option value="option2">Option 2</option>

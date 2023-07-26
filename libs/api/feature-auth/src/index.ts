@@ -1,2 +1,3 @@
 export * from './lib/auth.module';
-export * from './lib/owner.guard';
+export * from './lib/jwt.guard';
+export * from './lib/user.guard';

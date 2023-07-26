@@ -9,7 +9,7 @@ import { jwtConstants } from './constants';
 import { GqlExecutionContext } from '@nestjs/graphql';
 
 @Injectable()
-export class OwnerGuard implements CanActivate {
+export class JwtGuard implements CanActivate {
   constructor(private jwtService: JwtService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {

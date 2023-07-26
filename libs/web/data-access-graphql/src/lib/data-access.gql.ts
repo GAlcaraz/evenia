@@ -41,25 +41,41 @@ const GET_EVENT = gql`
       date
       description
       city
+      isOwner
     }
   }
 `;
 
 const CREATE_EVENT = gql`
   mutation CreateEvent(
-    $name: String
-    $date: DateTime
+    $ownerEmail: String
+    $name: String!
+    $date: DateTime!
     $description: String
-    $city: String
+    $city: City!
   ) {
     createEvent(
-      data: { name: $name, date: $date, description: $description, city: $city }
+      data: {
+        owner: { connect: { email: $ownerEmail } }
+        name: $name
+        date: $date
+        description: $description
+        city: $city
+      }
     ) {
       name
       id
       date
       description
       city
+    }
+  }
+`;
+
+const DELETE_EVENT = gql`
+  mutation DeleteEvent($id: String!) {
+    removeEvent(where: { id: $id }) {
+      id
     }
   }
 `;

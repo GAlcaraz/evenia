@@ -9,14 +9,7 @@ import {
 } from '@chakra-ui/react';
 import { format } from 'date-fns';
 import { Link } from '@chakra-ui/next-js';
-
-type Event = {
-  id: string;
-  name: string;
-  date: Date;
-  city: string;
-  description?: string | null | undefined;
-};
+import { Event } from '../_models/event';
 
 type EventCardProps = {
   event: Event;
