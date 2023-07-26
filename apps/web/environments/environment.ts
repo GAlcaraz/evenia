@@ -1,7 +1,7 @@
 export const webEnv: IWebEnv = {
   isProd: process.env.EVENIA_ENV === 'production',
   api: {
-    gqlUrl: process.env.EVENIA_WEB_GQL_URL,
+    gqlUrl: process.env.NEXT_PUBLIC_EVENIA_WEB_GQL_URL,
   },
 };
 
