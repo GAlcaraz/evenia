@@ -1,3 +1,6 @@
 import { getGraphqlClient } from '@evenia/web/data-access-graphql';
+import { webEnv } from '../environments/environment';
 
-export const gql = getGraphqlClient('http://localhost:3000/graphql');
+const { api } = webEnv;
+
+export const gql = getGraphqlClient(api.gqlUrl);
