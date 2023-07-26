@@ -37,8 +37,10 @@ const EditEvent: React.FC<{ eventId?: string }> = ({ eventId }) => {
     fetchEvent();
   }, []);
 
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
+  const formatDate = (date: Date | undefined) => {
+    if (!date) {
+      return null;
+    }
     const year = date.getFullYear();
     const month = ('0' + (date.getMonth() + 1)).slice(-2); // getMonth() is zero-indexed, so we add one
     const day = ('0' + date.getDate()).slice(-2);
@@ -135,7 +137,7 @@ const EditEvent: React.FC<{ eventId?: string }> = ({ eventId }) => {
                   placeholder="Description"
                   onChange={formik.handleChange}
                   resize="none"
-                  value={formik.values.description}
+                  value={formik.values.description || ''}
                   required
                 />
               </FormControl>
@@ -147,7 +149,7 @@ const EditEvent: React.FC<{ eventId?: string }> = ({ eventId }) => {
                     placeholder="Event date"
                     type="datetime-local"
                     onChange={formik.handleChange}
-                    value={formik.values.date}
+                    value={formik.values.date || undefined}
                     required
                   />
                 </InputGroup>

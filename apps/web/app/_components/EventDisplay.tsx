@@ -15,10 +15,14 @@ import { format } from 'date-fns';
 import { CalendarIcon } from '@chakra-ui/icons';
 import NextLink from 'next/link';
 import { useRouter } from 'next/navigation';
+import { Event } from '../_models/event';
+import { useSession } from 'next-auth/react';
 
 const EventDisplay: React.FC<{ eventId: string }> = ({ eventId }) => {
-  const [event, setEvent] = useState<unknown>();
+  const [event, setEvent] = useState<Event>();
   const [token, setToken] = useState<string>();
+  const { data: session } = useSession();
+
   const router = useRouter();
 
   useEffect(() => {
@@ -59,7 +63,6 @@ const EventDisplay: React.FC<{ eventId: string }> = ({ eventId }) => {
   if (!event) {
     return <></>;
   }
-  console.log(event);
   return (
     <VStack>
       <Stack w="100%" direction={['column', 'row']} align="center">
@@ -92,7 +95,7 @@ const EventDisplay: React.FC<{ eventId: string }> = ({ eventId }) => {
             <Heading fontSize={48}>{event?.name}</Heading>
             <HStack fontSize={18} justify="space-around">
               <Text>${Math.floor(Math.random() * 100)}</Text>
-              <Text pl={6}>{event?.owner || 'Dummy'}</Text>
+              <Text pl={6}>{session?.user?.email || 'TestUser'}</Text>
             </HStack>
             <Button>Register</Button>
           </VStack>
@@ -104,7 +107,7 @@ const EventDisplay: React.FC<{ eventId: string }> = ({ eventId }) => {
           <Text mt={5} fontWeight={700}>
             What You&apos;ll Learn:{' '}
           </Text>
-          <Text mt={2}>{event?.owner || 'Lorem Ipsum'}</Text>
+          <Text mt={2}>{session?.user?.email || 'TestUser'}</Text>
         </VStack>
         <VStack align="start" fontSize={20} p={20}>
           <HStack align="start">

@@ -4,4 +4,5 @@ export type Event = {
   date: Date;
   city: string;
   description?: string | null | undefined;
+  isOwner?: boolean | null | undefined;
 };
