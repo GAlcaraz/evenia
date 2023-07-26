@@ -22,6 +22,19 @@ import { Event } from '../_models/event';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
+const options = [
+  'Paris',
+  'NewYork',
+  'Istanbul',
+  'London',
+  'Madrid',
+  'Tokyo',
+  'Dubai',
+  'Blida',
+  'Wakanda',
+  'Gotham',
+];
+
 const EditEvent: React.FC<{ eventId?: string }> = ({ eventId }) => {
   const [event, setEvent] = useState<Event>();
   const { data: session } = useSession();
@@ -163,9 +176,13 @@ const EditEvent: React.FC<{ eventId?: string }> = ({ eventId }) => {
                   value={formik.values.city}
                   required
                 >
-                  <option value="Madrid">Madrid</option>
-                  <option value="option2">Option 2</option>
-                  <option value="option3">Option 3</option>
+                  {options.map((option) => {
+                    return (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    );
+                  })}
                 </Select>
               </FormControl>
             </VStack>

@@ -10,6 +10,7 @@ import {
 import { format } from 'date-fns';
 import { Link } from '@chakra-ui/next-js';
 import { Event } from '../_models/event';
+import { useSession } from 'next-auth/react';
 
 type EventCardProps = {
   event: Event;
@@ -22,6 +23,8 @@ const EventCard: React.FC<EventCardProps> = ({
   imgWidth = 300,
   imgHeight = 160,
 }) => {
+  const { data: session } = useSession();
+
   return (
     <Link href={`/events/${event.id}`} style={{ textDecoration: 'none' }}>
       <Card overflow="hidden" maxW={imgWidth}>
@@ -43,7 +46,7 @@ const EventCard: React.FC<EventCardProps> = ({
               {event.name}
             </Heading>
             <Text fontSize={16} color="text.grey" fontWeight={500}>
-              {event.user || 'Dummy User'}
+              {session?.user?.email || 'Dummy User'}
             </Text>
           </Stack>
         </CardBody>
