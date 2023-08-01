@@ -55,6 +55,17 @@ export class EventService {
     return true;
   }
 
+  async owner(eventId: string) {
+    const event = await this.prisma.event.findUnique({
+      where: { id: eventId },
+    });
+    const user = await this.prisma.user.findUnique({
+      where: { id: event?.ownerId },
+    });
+
+    return user;
+  }
+
   private async validateOwnership(
     eventId: string | undefined,
     ownerEmail: string

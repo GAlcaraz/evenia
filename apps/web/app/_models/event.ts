@@ -1,3 +1,7 @@
+type User = {
+  email: string;
+};
+
 export type Event = {
   id: string;
   name: string;
@@ -5,4 +9,5 @@ export type Event = {
   city: string;
   description?: string | null | undefined;
   isOwner?: boolean | null | undefined;
+  owner?: User | null | undefined;
 };
