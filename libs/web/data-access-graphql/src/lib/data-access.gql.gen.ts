@@ -6,7 +6,7 @@ import { gql } from 'graphql-request';
 export type GetEventsVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type GetEvents = { __typename?: 'Query', events: Array<{ __typename?: 'Event', id: string, name: string, date: any, description?: string | null, city: Types.City }> };
+export type GetEvents = { __typename?: 'Query', events: Array<{ __typename?: 'Event', id: string, name: string, date: any, description?: string | null, city: Types.City, owner: { __typename?: 'User', email: string } }> };
 
 export type UpdateEventVariables = Types.Exact<{
   id: Types.Scalars['String']['input'];
@@ -61,6 +61,9 @@ export const GetEventsDocument = /*#__PURE__*/ gql`
     date
     description
     city
+    owner {
+      email
+    }
   }
 }
     `;

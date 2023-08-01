@@ -101,15 +101,19 @@ const EventDisplay: React.FC<{ eventId: string }> = ({ eventId }) => {
           </VStack>
         </Flex>
       </Stack>
-      <Stack direction={['column', 'row']} justify="space-between">
-        <VStack align="start" fontSize={20} p={20}>
+      <Stack
+        direction={['column', 'row']}
+        justify="space-around"
+        w={['100%', '80%']}
+      >
+        <VStack fontSize={20} p={20} w="50%">
           <Text>{event.description || 'Lorem ipsum'}</Text>
           <Text mt={5} fontWeight={700}>
             What You&apos;ll Learn:{' '}
           </Text>
           <Text mt={2}>{session?.user?.email || 'TestUser'}</Text>
         </VStack>
-        <VStack align="start" fontSize={20} p={20}>
+        <VStack fontSize={20} p={20} w="50%">
           <HStack align="start">
             <CalendarIcon boxSize={12} mt={3} color="primary.majorelle" />
             <VStack pl={5} align="start">
@@ -121,7 +125,7 @@ const EventDisplay: React.FC<{ eventId: string }> = ({ eventId }) => {
           <Text mt={5} fontWeight={700}>
             Location:
           </Text>
-          <Text>ONLINE</Text>
+          <Text>{event.city}</Text>
         </VStack>
       </Stack>
     </VStack>

@@ -8,6 +8,9 @@ const GET_EVENTS = gql`
       date
       description
       city
+      owner {
+        email
+      }
     }
   }
 `;

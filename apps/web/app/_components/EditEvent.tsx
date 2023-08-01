@@ -155,6 +155,7 @@ const EditEvent: React.FC<{ eventId?: string }> = ({ eventId }) => {
                   resize="none"
                   value={formik.values.description || ''}
                   required
+                  maxLength={191}
                 />
               </FormControl>
               <FormControl>

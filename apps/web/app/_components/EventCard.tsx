@@ -24,7 +24,6 @@ const EventCard: React.FC<EventCardProps> = ({
   imgHeight = 160,
 }) => {
   const { data: session } = useSession();
-
   return (
     <Link href={`/events/${event.id}`} style={{ textDecoration: 'none' }}>
       <Card overflow="hidden" maxW={imgWidth}>
@@ -46,7 +45,7 @@ const EventCard: React.FC<EventCardProps> = ({
               {event.name}
             </Heading>
             <Text fontSize={16} color="text.grey" fontWeight={500}>
-              {session?.user?.email || 'Dummy User'}
+              {event?.owner?.email || 'Dummy User'}
             </Text>
           </Stack>
         </CardBody>

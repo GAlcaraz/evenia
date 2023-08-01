@@ -1,15 +1,23 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Flex, Heading, SimpleGrid } from '@chakra-ui/react';
 import { gql } from '../../data-access/graphql-client';
 import EventCard from './EventCard';
+import { Event } from '../_models/event';
 
 const CARD_WIDTH = 300;
 
-const Events = async () => {
-  const events = (await gql.GetEvents()).events;
+const Events = () => {
+  const [events, setEvents] = useState<Event[] | []>();
+
+  useEffect(() => {
+    async function fetchEvents() {
+      setEvents((await gql.GetEvents()).events);
+    }
+    fetchEvents();
+  }, []);
 
   return (
     <Flex direction="column" p="40px" align="center">
